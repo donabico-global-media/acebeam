@@ -1,4 +1,14 @@
+# Cho phép tất cả các công cụ tìm kiếm hợp lệ cào dữ liệu
 User-agent: *
 Allow: /
 
-Sitemap: https://donabico-media-system.github.io/acebeam/sitemap.xml
+# Chặn truy cập vào các tệp/thư mục nội bộ không cần lập chỉ mục
+Disallow: /Modules/
+Disallow: /scripts/
+Disallow: /config/
+Disallow: /*.json$
+Disallow: /*.yml$
+Disallow: /*.py$
+
+# Khai báo sơ đồ trang web chính xác cho Google Search Console
+Sitemap: https://acebeam.donabico.com/sitemap.xml
