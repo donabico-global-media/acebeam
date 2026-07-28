@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Trang chủ Landing Page -->
   <url>
-    <loc>https://donabico-media-system.github.io/acebeam/</loc>
+    <loc>https://acebeam.donabico.com/</loc>
     <lastmod>2026-07-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
 </urlset>
