@@ -2,7 +2,7 @@ name: GOOGLE SEARCH PROTOCOL
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # Chu kỳ vận hành ngầm chuẩn 4 tiếng/lần bảo vệ ma trận ESEB
+    - cron: '0 */4 * * *'
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
@@ -10,43 +10,53 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: eseb-search-protocol-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   orchestrate-search:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Python Environment
+      - name: 🐍 Set up Python Environment
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
-      - name: Execute Search Compiler
+      - name: ⚙️ Execute Search Compiler
         run: |
+          mkdir -p Modules Bridges
           if [ -f "Modules/Google-Search.py" ]; then
             python Modules/Google-Search.py
           else
-            echo "::error::Khong tim thay Modules/Google-Search.py!"
+            echo "::error::Không tìm thấy Modules/Google-Search.py!"
             exit 1
           fi
 
-      - name: Commit Search Core to Bridges Directory
+      - name: 🚀 Commit & Push Search Bridge
         run: |
-          # Thiết lập danh tính Git đồng bộ theo Actor của kho chứa
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Tiến trình kiểm tra và ép buộc đồng bộ dữ liệu
+          # Đồng bộ lịch sử commit với remote
+          git fetch origin ${{ github.ref_name }}
+          git reset --soft origin/${{ github.ref_name }}
+          
           if [ -f "Bridges/Google-Search.js" ]; then
             git add Bridges/Google-Search.js
             
-            # GIẢI PHÁP ĐỘC QUYỀN: Nếu không có thay đổi hoặc bị chặn quyền, ghi log và bỏ qua chứ không báo đỏ
-            git commit -m "seo(eseb): refresh organic search bridge in Bridges folder [skip ci]" || echo "Dữ liệu trùng khớp hoặc Git từ chối commit, tiếp tục tiến trình..."
-            git push origin HEAD:${{ github.ref_name }} || echo "Không thể push trực tiếp do bảo vệ nhánh, giữ nguyên trạng thái Xanh..."
+            if git diff --staged --quiet; then
+              echo "[ESEB] Dữ liệu Google-Search.js trùng khớp, không có thay đổi mới."
+            else
+              git commit -m "seo(eseb): refresh organic search bridge [skip ci]"
+              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+            fi
           else
-            echo "::error::Tep cau noi Bridges/Google-Search.js khong duoc tao ra!"
+            echo "::error::Tệp Bridges/Google-Search.js không tồn tại!"
             exit 1
           fi
