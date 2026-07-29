@@ -2,55 +2,47 @@ name: CORE-ORCHESTRATOR
 
 on:
   schedule:
-    - cron: '12 */4 * * *'
+    - cron: '0 */4 * * *'
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
   contents: write
   pages: write
-  id-token: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup Python Environment
+      - name: 🐍 Setup Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
-      - name: Verify Environment & Execute Core Engine
+      - name: ⚙️ Execute Core Engine (Generate JS Bridge)
         run: |
           mkdir -p "Super Core Affiliate" "Bridges" "Protocols"
-          
-          # Nếu file chưa tồn tại trong repo, tạo file fallback an toàn
-          if [ ! -f "Super Core Affiliate/Super-Core-Affiliate.py" ]; then
-            echo "[INFO] Python script not found. Initializing core module..."
-          fi
-          
           python "Super Core Affiliate/Super-Core-Affiliate.py"
 
-      - name: Commit & Push Compiled Assets
+      - name: 🚀 Commit & Push Bridges/Super-Core-Affiliate.js
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          git add "Super Core Affiliate/" Bridges/ Protocols/ sitemap.xml 2>/dev/null || true
+          git add Bridges/Super-Core-Affiliate.js
           
           if git diff --staged --quiet; then
-            echo "No compiled asset changes detected. Skipping commit."
+            echo "[ESEB] No compiled asset changes detected."
           else
-            git commit -m "chore: [system-orchestrator] auto-align brand assets [skip ci]"
-            git pull --rebase -X theirs origin main
+            git commit -m "build(eseb): auto-compile Bridges/Super-Core-Affiliate.js [skip ci]"
             git push origin main
           fi
 
-      - name: Deploy static site to GitHub Pages
+      - name: 🌐 Deploy Assets to GitHub Pages CDN
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
