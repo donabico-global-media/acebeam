@@ -1,1 +1,54 @@
-n
+name: CORE-ORCHESTRATOR
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: eseb-orchestrator-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐍 Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: ⚙️ Execute Core Engine (Generate JS Bridge)
+        run: |
+          mkdir -p "Super Core Affiliate" "Bridges" "Protocols"
+          python "Super Core Affiliate/Super-Core-Affiliate.py"
+
+      - name: 🚀 Commit & Push Bridges/Super-Core-Affiliate.js
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Đồng bộ lịch sử commit với remote
+          git fetch origin main
+          git reset --soft origin/main
+          
+          git add Bridges/Super-Core-Affiliate.js
+          
+          if git diff --staged --quiet; then
+            echo "[ESEB] Không có thay đổi nào mới trong JS Bridge."
+          else
+            git commit -m "build(eseb): auto-compile Bridges/Super-Core-Affiliate.js [skip ci]"
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+          fi
