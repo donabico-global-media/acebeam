@@ -3,18 +3,17 @@
  * DONABICO-MEDIA-SYSTEM SEARCH MATRIX
  * [Google-Search.js] - ESEB Search Optimization & Organic Rank Bridge
  * Generated Automatically via GOOGLE SEARCH PROTOCOL
+ * [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
  */
 (function() {
     'use strict';
     const BRAND_NAME = "DONABICO GLOBAL MEDIA SYSTEM";
     const SYSTEM_IDENTITY = "DONABICO-MEDIA-SYSTEM SEARCH MATRIX";
     const AFFILIATE_TARGET = "https://acebeamflashlight.sjv.io/donabio_global_media";
-    const SEARCH_BOTS = /googlebot|bingbot|yandexbot|baiduspider/i;
+    const SEARCH_BOTS = /googlebot|bingbot|yandexbot|baiduspider|duckduckbot/i;
 
     function injectSearchMeta() {
         // TỰ ĐỘNG BƠM CẤU TRÚC DỮ LIỆU ĐA TẦNG CHO BỘ LỌC SEARCH (SCHEMA STRUCTURED DATA CHUẨN ESEB)
-        const currentUrl = window.location.href;
-        
         const searchSchema = {
             "@context": "https://schema.org",
             "@graph": [
