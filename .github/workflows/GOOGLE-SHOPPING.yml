@@ -1,0 +1,56 @@
+name: GOOGLE SHOPPING PROTOCOL
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'  # Chạy tự động 4 tiếng một lần
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eseb-shopping-protocol-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  orchestrate-shopping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐍 Set up Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: ⚙️ Execute Real Shopping Engine
+        run: |
+          mkdir -p Modules feeds Bridges
+          if [ -f "Modules/Google-Shopping-Feed.py" ]; then
+            python Modules/Google-Shopping-Feed.py
+          else
+            echo "::error::Không tìm thấy Modules/Google-Shopping-Feed.py!"
+            exit 1
+          fi
+
+      - name: 🚀 Commit & Deploy XML Feed and Bridge
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git fetch origin ${{ github.ref_name }}
+          git reset --soft origin/${{ github.ref_name }}
+          
+          git add feeds/shopping-feed.xml Bridges/Google-Shopping.js
+          
+          if git diff --staged --quiet; then
+            echo "[ESEB] Tệp XML Feed và JS Bridge không có thay đổi."
+          else
+            git commit -m "build(eseb): auto-generate merchant xml feed and shopping bridge [skip ci]"
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+          fi
