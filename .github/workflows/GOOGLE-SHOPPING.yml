@@ -2,7 +2,7 @@ name: GOOGLE SHOPPING PROTOCOL
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # Chu kỳ tự động 4 tiếng một lần
+    - cron: '0 */4 * * *'  # Tự động cập nhật 4 giờ / lần
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
