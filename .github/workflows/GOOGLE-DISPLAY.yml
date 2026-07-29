@@ -2,7 +2,7 @@ name: GOOGLE DISPLAY PROTOCOL
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # CHU KỲ MỚI: Tự động chạy ngầm chính xác 4 tiếng một lần cho toàn bộ hệ thống
+    - cron: '0 */4 * * *'  # Chạy tự động 4 tiếng một lần
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
@@ -10,40 +10,53 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: eseb-display-protocol-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  orchestrate-bridge:
+  orchestrate-display:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Python Environment
+      - name: 🐍 Set up Python Environment
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
-      - name: Execute Gravity Compiler
+      - name: ⚙️ Execute Real Display Compiler
         run: |
+          mkdir -p Modules Bridges
           if [ -f "Modules/Google-Display.py" ]; then
             python Modules/Google-Display.py
           else
-            echo "::error::Khong tim thay Modules/Google-Display.py!"
+            echo "::error::Không tìm thấy Modules/Google-Display.py!"
             exit 1
           fi
 
-      - name: Deploy and Commit Dynamically to Root
+      - name: 🚀 Commit & Push Display Bridge
         run: |
-          # Nhận diện tự động Actor của kho chứa để tránh lỗi chặn quyền ghi (Permission Denied)
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Đồng bộ lịch sử commit chống xung đột push
+          git fetch origin ${{ github.ref_name }}
+          git reset --soft origin/${{ github.ref_name }}
           
           if [ -f "Bridges/Google-Display.js" ]; then
             git add Bridges/Google-Display.js
-            git diff-index --quiet HEAD || git commit -m "build(eseb): dynamic handshake bridge deploy [skip ci]"
-            git push origin HEAD:${{ github.ref_name }}
+            
+            if git diff --staged --quiet; then
+              echo "[ESEB] Dữ liệu Google-Display.js trùng khớp, không có thay đổi."
+            else
+              git commit -m "build(eseb): deploy real google display bot handshake bridge [skip ci]"
+              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+            fi
           else
-            echo "::error::Tep cau noi Bridges/Google-Display.js khong duoc tao ra!"
+            echo "::error::Tệp Bridges/Google-Display.js không tồn tại!"
             exit 1
           fi
