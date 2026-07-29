@@ -17,13 +17,14 @@ class ESEBShoppingEngine:
         self.system_identity = f"{self.github_user.upper()} SHOPPING MATRIX"
         self.domain = "https://acebeam.donabico.com"
         self.affiliate_target = "https://acebeamflashlight.sjv.io/donabio_global_media"
-        self.active_border = "#10B981"
+        self.active_border = "#10B981"  # Viền xanh lá cây active-modules
 
     def generate_shopping_xml(self):
-        os.makedirs("feeds", exist_ok=True)
-        xml_path = "feeds/shopping-feed.xml"
+        # KHỞI TẠO THƯ MỤC Feeds (VIẾT HOA) CHUẨN CẤU TRÚC
+        os.makedirs("Feeds", exist_ok=True)
+        xml_path = "Feeds/shopping-feed.xml"
 
-        # CẤU TRÚC RSS 2.0 CHUẨN GOOGLE MERCHANT CENTER (REAL-TIME RSS)
+        # CẤU TRÚC RSS 2.0 CHUẨN GOOGLE MERCHANT CENTER
         rss = ET.Element("rss", version="2.0")
         rss.set("xmlns:g", "http://base.google.com/ns/1.0")
 
