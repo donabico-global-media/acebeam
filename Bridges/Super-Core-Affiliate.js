@@ -3,7 +3,7 @@
  * [V-STAMP 24 AUTHENTICATED] | ID: acebeam
  */
 (function() {
-    const ESEB_TIMESTAMP = 1785273480;
+    const ESEB_TIMESTAMP = 1785295890;
     const CONFIG = {
         brandId: "acebeam",
         targetLink: "#INSERT_YOUR_AFFILIATE_LINK_HERE",
