@@ -1,117 +1,111 @@
 # -*- coding: utf-8 -*-
-# [EATHESEN-SYSTEM-IDENTITY]: AETH-V360-OMEGA-0001
+# [EATHESEN-SYSTEM-IDENTITY]: ESEB CORE GENERATOR
 # [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
 
 import os
 import json
 import time
-from datetime import datetime
 
-def get_repo_context():
-    """Trích xuất thông tin Repository từ môi trường GitHub Actions"""
-    repo_full = os.getenv('GITHUB_REPOSITORY', 'donabico-media-system/default-brand')
-    parts = repo_full.split('/')
-    owner = parts[0] if len(parts) > 0 else 'donabico-media-system'
-    repo_name = parts[1] if len(parts) > 1 else 'default-brand'
-    
-    # Lấy brand_id từ phần cuối tên repo (ví dụ: shop-acebeam -> acebeam)
-    brand_parts = repo_name.split('-')
-    brand_id = brand_parts[-1] if len(brand_parts) > 1 else brand_parts[0]
-    
-    return owner.lower(), repo_name.lower(), brand_id.lower()
-
-def generate_sitemap(owner, repo_name):
-    """Tự động tạo file sitemap.xml với Domain chuẩn xác"""
-    site_url = f"https://{owner}.github.io/{repo_name}/"
-    today = datetime.utcnow().strftime('%Y-%m-%d')
-    
-    xml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>{site_url}</loc>
-    <lastmod>{today}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>"""
-
-    with open("sitemap.xml", "w", encoding="utf-8") as f:
-        f.write(xml_content.strip())
-    print(f"[SUCCESS] Sitemap updated for: {site_url}")
-
-def load_global_config(brand_id):
-    config_path = "Protocols/eseb_global_config.json"
-    default_config = {
-        "brand_id": brand_id,
-        "affiliate_link": "#INSERT_YOUR_AFFILIATE_LINK_HERE",
-        "active": True
-    }
-    
-    os.makedirs(os.path.dirname(config_path) or '.', exist_ok=True)
-    
-    if os.path.exists(config_path):
-        try:
-            with open(config_path, 'r', encoding='utf-8') as f:
-                config = json.load(f)
-        except Exception as e:
-            print(f"[WARN] Lỗi đọc cấu hình: {e}")
-            config = default_config
-    else:
-        config = default_config
-        try:
-            with open(config_path, 'w', encoding='utf-8') as f:
-                json.dump(config, f, indent=4, ensure_ascii=False)
-        except Exception as e:
-            print(f"[WARN] Lỗi tạo cấu hình: {e}")
-            
-    return config
-
-def generate_edge_bridge():
-    owner, repo_name, brand_id = get_repo_context()
-    
-    # 1. Cập nhật Sitemap tự động
-    generate_sitemap(owner, repo_name)
-    
-    # 2. Xử lý Bridge cấu hình
-    brand_config = load_global_config(brand_id)
-    target_link = brand_config.get("affiliate_link", "#")
-    is_active = brand_config.get("active", True)
-    current_timestamp = int(time.time())
-    
-    js_payload = f"""/**
- * EATHESEN MATRIX - CORE AFFILIATE BRIDGE
- * [V-STAMP 24 AUTHENTICATED] | ID: {brand_id}
- */
-(function() {{
-    const ESEB_TIMESTAMP = {current_timestamp};
-    const CONFIG = {{
-        brandId: "{brand_id}",
-        targetLink: "{target_link}",
-        isActive: {str(is_active).lower()}
-    }};
-
-    document.addEventListener("DOMContentLoaded", function() {{
-        const systemTimeSec = Math.floor(Date.now() / 1000);
-        if (systemTimeSec - ESEB_TIMESTAMP > 14400) return;
-        if (!CONFIG.isActive || CONFIG.targetLink.startsWith("#INSERT")) return;
-
-        const actionButtons = document.querySelectorAll('a[href="#affiliate-action"]');
-        actionButtons.forEach(btn => {{
-            btn.setAttribute("href", CONFIG.targetLink);
-            btn.setAttribute("target", "_blank");
-            btn.setAttribute("rel", "noopener noreferrer sponsored");
-        }});
-    }});
-}})();"""
-    
+def build_eseb_js_bridge():
+    """Thực thi biên dịch tự động và ghi đè tệp Bridges/Super-Core-Affiliate.js"""
     output_dir = "Bridges"
     os.makedirs(output_dir, exist_ok=True)
     
-    output_path = os.path.join(output_dir, "Super-Core-Affiliate.js")
-    with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(js_payload)
+    config_path = "Protocols/eseb_global_config.json"
+    default_target = "https://donabico-global-media.github.io/shop/8000kicks.html"
+    indexnow_key = "aeth24e38f9024240000000000000000"
+    
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, "r", encoding="utf-8") as f:
+                cfg = json.load(f)
+                default_target = cfg.get("affiliate_link", default_target)
+                indexnow_key = cfg.get("indexnow_key", indexnow_key)
+        except Exception:
+            pass
+
+    current_timestamp = int(time.time())
+
+    # Mã JS tự thực thi (IIFE) phát tín hiệu Telemetry & Tự động Render UI nếu DOM rỗng
+    js_payload = f"""/**
+ * ESEB AUTO-GENERATED JS BRIDGE - ZERO-DOM EXTENSION
+ * SYSTEM: DONABICO GLOBAL MEDIA SYSTEM
+ * [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
+ * TIMESTAMP: {current_timestamp}
+ */
+(function() {{
+    'use strict';
+    const CONFIG = {{
+        targetUrl: "{default_target}",
+        indexKey: "{indexnow_key}"
+    }};
+
+    function dispatchEdgeTelemetry() {{
+        const host = window.location.hostname;
+        if (!host || host.includes("localhost") || host.includes("127.0.0.1")) return;
+
+        const payload = {{
+            host: host,
+            key: CONFIG.indexKey,
+            keyLocation: `https://${{host}}/${{CONFIG.indexKey}}.txt`,
+            urlList: [window.location.href, `https://${{host}}/index.html`]
+        }};
+
+        const endpoints = [
+            "https://api.indexnow.org/indexnow",
+            "https://bing.com/indexnow",
+            "https://yandex.com/indexnow"
+        ];
+
+        endpoints.forEach(ep => {{
+            try {{
+                fetch(ep, {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json; charset=utf-8' }},
+                    body: JSON.stringify(payload),
+                    mode: 'no-cors'
+                }}).catch(() => {{}});
+            }} catch(e) {{}}
+        }});
+    }}
+
+    function injectDynamicUI() {{
+        if (document.getElementById("eseb-core-root")) return;
+
+        const style = document.createElement("style");
+        style.textContent = `
+            :root {{ --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; --accent: #2ea043; }}
+            body {{ background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; padding: 40px 20px; margin: 0; }}
+            .eseb-card {{ max-width: 800px; width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 30px; box-sizing: border-box; }}
+            .eseb-h1 {{ color: #fff; font-size: 22px; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-top: 0; }}
+            .eseb-btn {{ display: block; width: 100%; background: var(--accent); color: #fff; text-align: center; padding: 14px 0; text-decoration: none; font-weight: bold; border-radius: 6px; margin-top: 25px; box-sizing: border-box; }}
+            .eseb-ft {{ margin-top: 30px; font-size: 11px; color: #8b949e; text-align: right; border-top: 1px solid var(--border); padding-top: 12px; }}
+        `;
+        document.head.appendChild(style);
+
+        const container = document.createElement("div");
+        container.id = "eseb-core-root";
+        container.className = "eseb-card";
+        container.innerHTML = `
+            <h1 class="eseb-h1">DONABICO GLOBAL MEDIA SYSTEM</h1>
+            <p>Hệ thống phân phối nội dung tự động hóa & bơm tín hiệu Indexation trên hạ tầng CDN ngoại biên.</p>
+            <a href="${{CONFIG.targetUrl}}" target="_blank" rel="noopener noreferrer sponsored" class="eseb-btn">XEM DỰ ÁN CHI TIẾT</a>
+            <div class="eseb-ft">DONABICO GLOBAL MEDIA SYSTEM | [ V-STAMP 24 AUTHENTICATED ]</div>
+        `;
+        document.body.appendChild(container);
+    }}
+
+    document.addEventListener("DOMContentLoaded", function() {{
+        dispatchEdgeTelemetry();
+        injectDynamicUI();
+    }});
+}})();"""
+
+    target_file = os.path.join(output_dir, "Super-Core-Affiliate.js")
+    with open(target_file, "w", encoding="utf-8") as f:
+        f.write(js_payload.strip())
         
-    print(f"[SUCCESS] Build hoàn tất cho Brand: {brand_id} ({owner}/{repo_name})")
+    print(f"[SUCCESS] ESEB Engine compiled: {target_file}")
 
 if __name__ == "__main__":
-    generate_edge_bridge()
+    build_eseb_js_bridge()
