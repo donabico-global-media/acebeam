@@ -2,15 +2,16 @@
 """
 DONABICO GLOBAL MEDIA SYSTEM
 [Google-Search.py] - ESEB Organic Search Target Inception Compiler
+[V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
 """
 
 import os
 
 class EsebSearchMatrixEngine:
     def __init__(self):
-        # TỰ ĐỘNG NHẬN DIỆN MÔI TRƯỜNG KHO CHỨA (DANH TÍNH MỚI CHUẨN THƯƠNG HIỆU)
+        # TỰ ĐỘNG NHẬN DIỆN MÔI TRƯỜNG KHO CHỨA
         self.github_user = os.getenv("GITHUB_REPOSITORY_OWNER", "donabico-media-system")
-        self.repo_name = os.getenv("GITHUB_REPOSITORY", "donabico-media-system/landing_pages").split("/")[-1]
+        self.repo_name = os.getenv("GITHUB_REPOSITORY", "donabico-media-system/acebeam").split("/")[-1]
         
         # CHUẨN HÓA TÊN THƯƠNG HIỆU THEO PHÂN CẤP HỆ THỐNG
         self.brand_name = "DONABICO GLOBAL MEDIA SYSTEM"
@@ -20,7 +21,7 @@ class EsebSearchMatrixEngine:
         self.affiliate_target = "https://acebeamflashlight.sjv.io/donabio_global_media"
 
     def compile_search_core(self):
-        # ĐẢM BẢO TẠO ĐÚNG THƯ MỤC BRIDGES THEO MỆNH LỆNH SẾP
+        # ĐẢM BẢO TẠO ĐÚNG THƯ MỤC BRIDGES
         os.makedirs("Bridges", exist_ok=True)
         js_path = "Bridges/Google-Search.js"
         
@@ -29,13 +30,14 @@ class EsebSearchMatrixEngine:
  * {self.system_identity}
  * [Google-Search.js] - ESEB Search Optimization & Organic Rank Bridge
  * Generated Automatically via GOOGLE SEARCH PROTOCOL
+ * [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
  */
 (function() {{
     'use strict';
     const BRAND_NAME = "{self.brand_name}";
     const SYSTEM_IDENTITY = "{self.system_identity}";
     const AFFILIATE_TARGET = "{self.affiliate_target}";
-    const SEARCH_BOTS = /googlebot|bingbot|yandexbot|baiduspider/i;
+    const SEARCH_BOTS = /googlebot|bingbot|yandexbot|baiduspider|duckduckbot/i;
 
     function injectSearchMeta() {{
         // TỰ ĐỘNG BƠM CẤU TRÚC DỮ LIỆU ĐA TẦNG CHO BỘ LỌC SEARCH (SCHEMA STRUCTURED DATA CHUẨN ESEB)
