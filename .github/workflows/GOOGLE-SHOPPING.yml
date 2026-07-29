@@ -2,7 +2,7 @@ name: GOOGLE SHOPPING PROTOCOL
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # Chạy tự động 4 tiếng một lần
+    - cron: '0 */4 * * *'  # Chu kỳ tự động 4 tiếng một lần
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
 
       - name: ⚙️ Execute Real Shopping Engine
         run: |
-          mkdir -p Modules feeds Bridges
+          mkdir -p Modules Feeds Bridges
           if [ -f "Modules/Google-Shopping-Feed.py" ]; then
             python Modules/Google-Shopping-Feed.py
           else
@@ -46,7 +46,7 @@ jobs:
           git fetch origin ${{ github.ref_name }}
           git reset --soft origin/${{ github.ref_name }}
           
-          git add feeds/shopping-feed.xml Bridges/Google-Shopping.js
+          git add Feeds/shopping-feed.xml Bridges/Google-Shopping.js
           
           if git diff --staged --quiet; then
             echo "[ESEB] Tệp XML Feed và JS Bridge không có thay đổi."
