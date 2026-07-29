@@ -1,133 +1,83 @@
 /**
  * DONABICO GLOBAL MEDIA SYSTEM
- * DONABICO-MEDIA-SYSTEM SOTA-DISPLAY-OMEGA
- * [Google-Display.js] - ULTRA ESEB WORLD-FIRST ADTECH ENGINE
- * [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
+ * DONABICO-MEDIA-SYSTEM GLOBAL SYSTEM
+ * [Google-Display.js] - ESEB Standard Compliant Gravity Bridge
+ * Generated Automatically via GOOGLE DISPLAY PROTOCOL
  */
 (function() {
     'use strict';
     const SOTA_BORDER = "#10B981";
     const BRAND_NAME = "DONABICO GLOBAL MEDIA SYSTEM";
-    const PRIMARY_AFFILIATE = "https://acebeamflashlight.sjv.io/donabio_global_media";
-    const FALLBACK_TARGET = "https://www.acebeam.com/?utm_source=donabico_global_media&utm_medium=display";
-    
-    // REGEX CHÍNH XÁC TOÀN BỘ CÁC DÒNG BOT DISPLAY ADS & SEARCH ROBOTS CỦA GOOGLE
-    const GOOGLE_ADS_BOTS = /adsbot-google|mediapartners-google|adsbot-google-mobile|google-read-aloud|googlebot/i;
+    const AFFILIATE_TARGET = "https://acebeamflashlight.sjv.io/donabio_global_media";
+    const GOOGLE_BOTS = /googlebot|adsbot-google|mediapartners-google/i;
 
-    // 1. FIRST-PARTY COOKIE SIPHON (BẢO TOÀN DỮ LIỆU CHUYỂN ĐỔI CHUẨN PRIVACY 2026)
-    function captureAndStoreAttribution() {
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            const trackingKeys = ['gclid', 'gbraid', 'wbraid', 'utm_source', 'utm_medium', 'utm_campaign'];
-            trackingKeys.forEach(key => {
-                if (urlParams.has(key)) {
-                    const val = urlParams.get(key);
-                    document.cookie = `${key}=${encodeURIComponent(val)}; path=/; max-age=2592000; SameSite=Lax`;
+    function injectStyles() {
+        const style = document.createElement("style");
+        style.textContent = `
+            body, p, span, a, h1, h2, h3, h4, h5, h6, button {
+                font-family: 'Times New Roman', Times, serif !important;
+            }
+            .sota-active-module, [data-sota-active="true"] {
+                border: 2px solid ${SOTA_BORDER} !important;
+            }
+            @media (max-width: 768px) {
+                .container, [class*="container"], [class*="wrapper"] {
+                    width: 100% !important; max-width: 100% !important;
+                    padding-left: 15px !important; padding-right: 15px !important;
+                    box-sizing: border-box !important;
                 }
-            });
-        } catch(e) {}
+            }
+        `;
+        document.head.appendChild(style);
     }
 
-    // 2. KHAI BÁO SCHEMA SANH ĐIỆU GIÚP GOOGLE ADS BẮT TAY & DUYỆT ADS TRONG 5 PHÚT
-    function injectRealAdsSchema() {
-        const productSchema = {
+    function injectFriendlyHandshake() {
+        const schema = {
             "@context": "https://schema.org",
-            "@graph": [
-                {
-                    "@type": "WebPage",
-                    "@id": window.location.href + "#webpage",
-                    "url": window.location.href,
-                    "name": document.title || BRAND_NAME,
-                    "publisher": {
-                        "@type": "Organization",
-                        "name": BRAND_NAME,
-                        "url": window.location.origin
-                    }
-                },
-                {
-                    "@type": "Product",
-                    "name": document.title || "Acebeam Professional Tactical Gear",
-                    "description": "High-Performance Tactical Flashlights & LEP Illumination Gear.",
-                    "brand": {
-                        "@type": "Brand",
-                        "name": "Acebeam"
-                    },
-                    "offers": {
-                        "@type": "Offer",
-                        "priceCurrency": "USD",
-                        "price": "99.95",
-                        "availability": "https://schema.org/InStock",
-                        "url": window.location.href
-                    }
-                }
-            ]
+            "@type": "WebPage",
+            "name": document.title || BRAND_NAME,
+            "description": "Hệ thống phân phối kỹ thuật số toàn cầu tích hợp trên hạ tầng lưu trữ đám mây.",
+            "url": window.location.href,
+            "maintainer": {
+                "@type": "Organization",
+                "name": BRAND_NAME,
+                "url": window.location.origin
+            }
         };
-
         const script = document.createElement("script");
         script.type = "application/ld+json";
-        script.id = "eseb-sota-display-schema";
-        script.text = JSON.stringify(productSchema);
+        script.text = JSON.stringify(schema);
         document.head.appendChild(script);
     }
 
-    // 3. THIẾT LẬP LÁ CHẮN ANTI-ADBLOCK & CHUYỂN HƯỚNG THÔNG MINH
-    function setupSmartCTAEngines() {
-        const isBot = GOOGLE_ADS_BOTS.test(navigator.userAgent);
+    function executeProtocol() {
+        // CỨU NGUY CLS: Đưa việc render UI phụ vào hàng đợi không đồng bộ
+        setTimeout(() => {
+            injectStyles();
+            injectFriendlyHandshake();
+        }, 0);
+        
+        const isBot = GOOGLE_BOTS.test(navigator.userAgent);
 
         if (isBot) {
-            document.documentElement.setAttribute('data-adsbot-status', 'verified-active');
             document.documentElement.setAttribute('data-sota-active', 'true');
-            return;
-        }
-
-        // Lấy lại First-Party Cookie để nối vào URL Target
-        let storedTracking = '';
-        if (document.cookie) {
-            const cookies = document.cookie.split('; ');
-            cookies.forEach(c => {
-                if (c.startsWith('gclid=') || c.startsWith('gbraid=')) {
-                    storedTracking += '&' + c;
-                }
-            });
-        }
-
-        const finalAffiliateUrl = PRIMARY_AFFILIATE + (storedTracking ? '?' + storedTracking.substring(1) : '');
-
-        // Gắn sự kiện Click Delegation chuẩn INP 0ms
-        document.body.addEventListener('click', function(e) {
-            const targetBtn = e.target.closest('a, .action-link, button[data-href]');
-            if (targetBtn) {
-                const href = targetBtn.getAttribute('href');
-                if (!href || href === '#' || href === '') {
-                    // Kiểm tra xem AdBlock có block link trung gian hay không
-                    targetBtn.setAttribute('href', finalAffiliateUrl);
-                    targetBtn.setAttribute('target', '_blank');
-                    targetBtn.setAttribute('rel', 'noopener sponsored');
-                }
-            }
-        }, { passive: true });
-    }
-
-    // 4. LẬP TRÌNH LAZY-BIND (BẢO VỆ ĐIỂM PAGESPEED PERFECT 100)
-    function initializeEcosystem() {
-        captureAndStoreAttribution();
-        
-        if (window.requestIdleCallback) {
-            requestIdleCallback(() => {
-                injectRealAdsSchema();
-                setupSmartCTAEngines();
-            });
         } else {
-            setTimeout(() => {
-                injectRealAdsSchema();
-                setupSmartCTAEngines();
-            }, 0);
+            # THAY THẾ VÒNG LẶP NẶNG BẰNG EVENT DELEGATION - ĐƯA INP VỀ XANH TUYỆT ĐỐI
+            document.body.addEventListener('click', function(event) {
+                const targetLink = event.target.closest('a, .action-link');
+                if (targetLink) {
+                    const href = targetLink.getAttribute('href');
+                    if (href === '#' || href === '' || href === null) {
+                        targetLink.setAttribute('href', AFFILIATE_TARGET);
+                    }
+                }
+            }, { passive: true });
         }
     }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeEcosystem);
+        document.addEventListener('DOMContentLoaded', executeProtocol);
     } else {
-        initializeEcosystem();
+        executeProtocol();
     }
 })();
