@@ -11,12 +11,18 @@ permissions:
   contents: write
   pages: write
 
+concurrency:
+  group: eseb-orchestrator-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: 🐍 Setup Python 3.12
         uses: actions/setup-python@v5
@@ -39,6 +45,10 @@ jobs:
             echo "[ESEB] No compiled asset changes detected."
           else
             git commit -m "build(eseb): auto-compile Bridges/Super-Core-Affiliate.js [skip ci]"
+            
+            # Đồng bộ lịch sử commit mới nhất từ origin/main để chống xung đột push
+            git pull origin main --rebase || git rebase --skip
+            
             git push origin main
           fi
 
