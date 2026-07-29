@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   pages: write
+  id-token: write
 
 concurrency:
   group: eseb-orchestrator-${{ github.ref }}
@@ -46,15 +47,9 @@ jobs:
           else
             git commit -m "build(eseb): auto-compile Bridges/Super-Core-Affiliate.js [skip ci]"
             
-            # Đồng bộ lịch sử commit mới nhất từ origin/main để chống xung đột push
-            git pull origin main --rebase || git rebase --skip
+            git fetch origin main
+            git rebase -X ours origin/main || (git rebase --abort && git pull origin main -s recursive -X ours --no-edit)
             
-            git push origin main
+            # Sử dụng GITHUB_TOKEN mặc định của hệ thống
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
           fi
-
-      - name: 🌐 Deploy Assets to GitHub Pages CDN
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          publish_branch: gh-pages
