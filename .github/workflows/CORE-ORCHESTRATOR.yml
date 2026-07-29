@@ -40,16 +40,18 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
+          # Đồng bộ cây thư mục với remote mới nhất
+          git fetch origin main
+          
+          # Đưa HEAD về trùng với origin/main nhưng giữ lại tệp vừa build
+          git reset --soft origin/main
+          
+          # Stage tệp JS mới nhất
           git add Bridges/Super-Core-Affiliate.js
           
           if git diff --staged --quiet; then
-            echo "[ESEB] No compiled asset changes detected."
+            echo "[ESEB] Không có thay đổi nào mới trong JS Bridge."
           else
             git commit -m "build(eseb): auto-compile Bridges/Super-Core-Affiliate.js [skip ci]"
-            
-            git fetch origin main
-            git rebase -X ours origin/main || (git rebase --abort && git pull origin main -s recursive -X ours --no-edit)
-            
-            # Sử dụng GITHUB_TOKEN mặc định của hệ thống
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
           fi
