@@ -17,7 +17,7 @@
             "@context": "https://schema.org",
             "@type": "Product",
             "name": document.title || "Acebeam Tactical Gear",
-            "image": [window.location.origin + "/assets/images/product.jpg"],
+            "image": ["https://www.acebeam.com/images/thumbs/000/0003503_defender-p16-tactical-flashlight.jpeg"],
             "description": "High-Performance Tactical Gear",
             "sku": "ACEBEAM-TAC-001",
             "brand": {
