@@ -20,11 +20,9 @@ class ESEBShoppingEngine:
         self.active_border = "#10B981"  # Viền xanh lá cây active-modules
 
     def generate_shopping_xml(self):
-        # KHỞI TẠO THƯ MỤC Feeds (VIẾT HOA) CHUẨN CẤU TRÚC
         os.makedirs("Feeds", exist_ok=True)
         xml_path = "Feeds/shopping-feed.xml"
 
-        # CẤU TRÚC RSS 2.0 CHUẨN GOOGLE MERCHANT CENTER
         rss = ET.Element("rss", version="2.0")
         rss.set("xmlns:g", "http://base.google.com/ns/1.0")
 
@@ -33,13 +31,15 @@ class ESEBShoppingEngine:
         ET.SubElement(channel, "link").text = self.domain
         ET.SubElement(channel, "description").text = "Automated High-Performance Acebeam Tactical Gear Syndication Feed"
 
-        # ITEM DỮ LIỆU SẢN PHẨM CHUẨN GOOGLE SHOPPING SPECIFICATIONS
         item = ET.SubElement(channel, "item")
         ET.SubElement(item, "g:id").text = "ACEBEAM-TAC-001"
         ET.SubElement(item, "title").text = "Acebeam Tactical Illumination Gear - Professional Series"
         ET.SubElement(item, "description").text = "High-Performance Tactical Flashlights, LEP Lights and Outdoor Search Gear."
         ET.SubElement(item, "link").text = self.domain
-        ET.SubElement(item, "g:image_link").text = f"{self.domain}/assets/images/product.jpg"
+        
+        # LINK ẢNH TRỰC TIẾP CHUẨN ĐỊNH DẠNG JPEG DÀNH CHO GOOGLE MERCHANT CENTER
+        ET.SubElement(item, "g:image_link").text = "https://www.acebeam.com/images/thumbs/000/0003503_defender-p16-tactical-flashlight.jpeg"
+        
         ET.SubElement(item, "g:availability").text = "in_stock"
         ET.SubElement(item, "g:price").text = "99.95 USD"
         ET.SubElement(item, "g:brand").text = "Acebeam"
@@ -74,7 +74,7 @@ class ESEBShoppingEngine:
             "@context": "https://schema.org",
             "@type": "Product",
             "name": document.title || "Acebeam Tactical Gear",
-            "image": [window.location.origin + "/assets/images/product.jpg"],
+            "image": ["https://www.acebeam.com/images/thumbs/000/0003503_defender-p16-tactical-flashlight.jpeg"],
             "description": "High-Performance Tactical Gear",
             "sku": "ACEBEAM-TAC-001",
             "brand": {{
