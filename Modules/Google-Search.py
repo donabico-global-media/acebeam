@@ -41,8 +41,6 @@ class EsebSearchMatrixEngine:
 
     function injectSearchMeta() {{
         // TỰ ĐỘNG BƠM CẤU TRÚC DỮ LIỆU ĐA TẦNG CHO BỘ LỌC SEARCH (SCHEMA STRUCTURED DATA CHUẨN ESEB)
-        const currentUrl = window.location.href;
-        
         const searchSchema = {{
             "@context": "https://schema.org",
             "@graph": [
