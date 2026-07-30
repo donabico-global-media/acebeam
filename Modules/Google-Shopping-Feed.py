@@ -1,5 +1,3 @@
-# CODE CẬP NHẬT TOÀN BỘ FILE Modules/Google-Shopping-Feed.py[span_5](start_span)[span_5](end_span):
-
 # -*- coding: utf-8 -*-
 """
 DONABICO GLOBAL MEDIA SYSTEM
@@ -23,7 +21,7 @@ class ESEBShoppingEngine:
 
     def generate_shopping_xml(self):
         os.makedirs("Feeds", exist_ok=True)
-        xml_path = "Feeds/Shopping-Feed.xml[span_6](start_span)[span_7](start_span)"[span_6](end_span)[span_7](end_span)
+        xml_path = "Feeds/Shopping-Feed.xml"
 
         rss = ET.Element("rss", version="2.0")
         rss.set("xmlns:g", "http://base.google.com/ns/1.0")
@@ -38,7 +36,7 @@ class ESEBShoppingEngine:
         ET.SubElement(item, "title").text = "Acebeam Tactical Illumination Gear - Professional Series"
         ET.SubElement(item, "description").text = "High-Performance Tactical Flashlights, LEP Lights and Outdoor Search Gear."
         ET.SubElement(item, "link").text = self.domain
-        ET.SubElement(item, "g:image_link").text = "https://www.acebeam.com/images/thumbs/000/0003503_defender-p16-tactical-flashlight.jpeg[span_8](start_span)"[span_8](end_span)
+        ET.SubElement(item, "g:image_link").text = "https://www.acebeam.com/images/thumbs/000/0003503_defender-p16-tactical-flashlight.jpeg"
         ET.SubElement(item, "g:availability").text = "in_stock"
         ET.SubElement(item, "g:price").text = "99.95 USD"
         ET.SubElement(item, "g:brand").text = "Acebeam"
@@ -52,7 +50,7 @@ class ESEBShoppingEngine:
 
     def compile_shopping_bridge(self):
         os.makedirs("Bridges", exist_ok=True)
-        js_path = "Bridges/Google-Shopping.js[span_9](start_span)[span_10](start_span)"[span_9](end_span)[span_10](end_span)
+        js_path = "Bridges/Google-Shopping.js"
 
         js_content = f"""/**
  * {self.brand_name}
