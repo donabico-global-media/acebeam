@@ -9,12 +9,11 @@ import os
 
 class IsolatedGoogleDisplayEngine:
     def __init__(self):
-        self.github_user = os.getenv("GITHUB_REPOSITORY_OWNER", "donabico-media-system")
-        self.repo_name = os.getenv("GITHUB_REPOSITORY", "donabico-media-system/acebeam").split("/")[-1]
+        self.github_user = os.getenv("GITHUB_REPOSITORY_OWNER", "donabico-global-media")
+        self.repo_name = os.getenv("GITHUB_REPOSITORY", "donabico-global-media/acebeam").split("/")[-1]
         
         self.brand_name = "DONABICO GLOBAL MEDIA SYSTEM"
         self.system_identity = f"{self.github_user.upper()} DISPLAY-ADTECH-MODULE"
-        self.active_border = "#10B981"  # Viền xanh lá cây chỉ thị Active Module
         self.affiliate_target = "https://acebeamflashlight.sjv.io/donabio_global_media"
         self.direct_fallback = "https://www.acebeam.com/?utm_source=donabico_global_media&utm_medium=display"
 
@@ -33,7 +32,7 @@ class IsolatedGoogleDisplayEngine:
     const PRIMARY_AFFILIATE = "{self.affiliate_target}";
     const FALLBACK_TARGET = "{self.direct_fallback}";
     
-    // REGEX CHỈ BẮT BÓNG CÁC BOT QUẢNG CÁO CỦA GOOGLE ADS
+    // BẮT BÓNG GOOGLE ADS BOTS CỤ THỂ
     const GOOGLE_ADS_BOTS = /adsbot-google|mediapartners-google|adsbot-google-mobile/i;
 
     // 1. FIRST-PARTY COOKIE ATTRIBUTION (BẢO TOÀN GCLID / GBRAID / UTMS)
@@ -50,39 +49,24 @@ class IsolatedGoogleDisplayEngine:
         }} catch(e) {{}}
     }}
 
-    // 2. KHAI BÁO SCHEMA CHUYÊN BIỆT DUYỆT ADS NHANH CHÓNG
+    // 2. KHAI BÁO SCHEMA WEBPAGE CHUẨN ADTECH (KHÔNG BỊ LỖI SEARCH CONSOLE)
     function injectGoogleAdsSchema() {{
         const displaySchema = {{
             "@context": "https://schema.org",
-            "@graph": [
-                {{
-                    "@type": "WebPage",
-                    "@id": window.location.href + "#webpage",
-                    "url": window.location.href,
-                    "name": document.title || "{self.brand_name}",
-                    "publisher": {{
-                        "@type": "Organization",
-                        "name": "{self.brand_name}",
-                        "url": window.location.origin
-                    }}
-                }},
-                {{
-                    "@type": "Product",
-                    "name": document.title || "Acebeam Professional Tactical Gear",
-                    "description": "High-Performance Tactical Flashlights & LEP Illumination Gear.",
-                    "brand": {{
-                        "@type": "Brand",
-                        "name": "Acebeam"
-                    }},
-                    "offers": {{
-                        "@type": "Offer",
-                        "priceCurrency": "USD",
-                        "price": "99.95",
-                        "availability": "https://schema.org/InStock",
-                        "url": window.location.href
-                    }}
-                }}
-            ]
+            "@type": "WebPage",
+            "name": document.title || "Acebeam Professional Flashlight Series",
+            "description": "High-Performance Tactical Flashlights & LEP Illumination Gear.",
+            "url": window.location.href,
+            "publisher": {{
+                "@type": "Organization",
+                "name": "{self.brand_name}",
+                "url": window.location.origin
+            }},
+            "mainEntity": {{
+                "@type": "Thing",
+                "name": "Acebeam Tactical Illumination",
+                "sameAs": "https://www.acebeam.com/"
+            }}
         }};
 
         const script = document.createElement("script");
@@ -92,7 +76,7 @@ class IsolatedGoogleDisplayEngine:
         document.head.appendChild(script);
     }}
 
-    // 3. XỬ LÝ CHUYỂN HƯỚNG ADS & BẮT TAY BOT ADS
+    // 3. XỬ LÝ TRAFFIC VÀ BẮT TAY GOOGLE ADS BOT
     function handleDisplayTraffic() {{
         const isAdsBot = GOOGLE_ADS_BOTS.test(navigator.userAgent);
 
@@ -101,7 +85,7 @@ class IsolatedGoogleDisplayEngine:
             return;
         }}
 
-        // Trích xuất lại GCLID / GBRAID gắn vào URL Target
+        // Gắn lại tham số GCLID/GBRAID đã lưu vào link đích
         let storedTracking = '';
         if (document.cookie) {{
             const cookies = document.cookie.split('; ');
@@ -127,7 +111,7 @@ class IsolatedGoogleDisplayEngine:
         }}, {{ passive: true }});
     }}
 
-    // KHỞI CHẠY KHÔNG ẢNH HƯỞNG TỚI CORE
+    // KHỜI CHẠY ĐỘC LẬP
     function initDisplayModule() {{
         captureGoogleAdsTracking();
         
