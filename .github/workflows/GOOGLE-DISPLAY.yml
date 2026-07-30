@@ -18,29 +18,29 @@ jobs:
   orchestrate-display:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Python
+      - name: 🐍 Setup Python Environment
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Run Display Compiler
+      - name: ⚙️ Execute Display Compiler
         run: |
           mkdir -p Modules Bridges
           if [ -f "Modules/Google-Display.py" ]; then
             python Modules/Google-Display.py
             ls -la Bridges/
           else
-            echo "Error: Modules/Google-Display.py not found!"
+            echo "::error::Modules/Google-Display.py not found!"
             exit 1
           fi
 
-      - name: Commit and Push
+      - name: 🚀 Commit and Push Display Bridge
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -51,12 +51,16 @@ jobs:
             git add Bridges/Google-Display.js
             
             if git diff --staged --quiet; then
-              echo "No changes in Google-Display.js. Skipping commit."
+              echo "[ESEB DISPLAY] No changes in Google-Display.js. Skipping commit."
             else
               git commit -m "build(eseb-display): deploy isolated google display bridge [skip ci]"
+              
+              # Tự động đồng bộ commit mới nhất từ Remote trước khi Push để tránh lỗi non-fast-forward
+              git pull origin ${{ github.ref_name }} --rebase
+              
               git push origin HEAD:${{ github.ref_name }}
             fi
           else
-            echo "Error: Bridges/Google-Display.js does not exist!"
+            echo "::error::Bridges/Google-Display.js does not exist!"
             exit 1
           fi
