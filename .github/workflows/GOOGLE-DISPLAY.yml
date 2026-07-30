@@ -1,62 +1,23 @@
-name: GOOGLE DISPLAY PROTOCOL
-
-on:
-  schedule:
-    - cron: '0 */4 * * *'  # Chạy tự động 4 tiếng một lần
-  push:
-    branches: [ "main", "master" ]
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-concurrency:
-  group: eseb-display-protocol-${{ github.ref }}
-  cancel-in-progress: true
-
-jobs:
-  orchestrate-display:
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: 🐍 Set up Python Environment
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: ⚙️ Execute Isolated Display Compiler
-        run: |
-          mkdir -p Modules Bridges
-          if [ -f "Modules/Google-Display.py" ]; then
-            python Modules/Google-Display.py
-            ls -la Bridges/
-          else
-            echo "::error::Không tìm thấy Modules/Google-Display.py!"
-            exit 1
-          fi
-
       - name: 🚀 Commit & Push Display Bridge
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          git fetch origin ${{ github.ref_name }}
-          git reset --soft origin/${{ github.ref_name }}
+          # Đảm bảo thư mục Bridges tồn tại
+          mkdir -p Bridges
           
+          # Chỉ add nếu file tồn tại
           if [ -f "Bridges/Google-Display.js" ]; then
             git add Bridges/Google-Display.js
             
+            # Nếu không có thay đổi nào mới thì bỏ qua mượt mà chứ không báo lỗi đỏ (exit 0)
             if git diff --staged --quiet; then
-              echo "[ESEB DISPLAY] Không có thay đổi trong Google-Display.js."
+              echo "[ESEB DISPLAY] File JS Bridge không có thay đổi mới. Bỏ qua bước Commit."
             else
               git commit -m "build(eseb-display): deploy isolated google display bridge [skip ci]"
-              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+              git push origin HEAD:${{ github.ref_name }}
             fi
           else
-            echo "::error::Tệp Bridges/Google-Display.js không tồn tại!"
+            echo "::error::File Bridges/Google-Display.js không tồn tại sau khi chạy Python!"
             exit 1
           fi
