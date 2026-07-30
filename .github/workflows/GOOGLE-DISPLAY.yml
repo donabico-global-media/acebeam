@@ -45,23 +45,26 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
+          # 1. Đồng bộ thông tin Remote
+          git fetch origin ${{ github.ref_name }}
+          
           mkdir -p Bridges
           
           if [ -f "Bridges/Google-Display.js" ]; then
-            git add Bridges/Google-Display.js
-            
-            if git diff --staged --quiet; then
-              echo "[ESEB DISPLAY] No changes in Google-Display.js. Skipping commit."
+            # 2. Kiểm tra nếu file JS tạo ra trùng khớp 100% với file đang có trên Remote thì bỏ qua
+            if git diff origin/${{ github.ref_name }} -- Bridges/Google-Display.js --quiet; then
+              echo "[ESEB DISPLAY] Bridges/Google-Display.js đã đồng bộ hoàn toàn với remote. Bỏ qua commit."
             else
+              git add Bridges/Google-Display.js
               git commit -m "build(eseb-display): deploy isolated google display bridge [skip ci]"
               
-              # Tự động đồng bộ commit mới nhất từ Remote trước khi Push để tránh lỗi non-fast-forward
-              git pull origin ${{ github.ref_name }} --rebase
+              # 3. Rebase tự động giải quyết conflict bằng cách giữ lại bản biên dịch mới nhất từ Runner (-X ours)
+              git pull origin ${{ github.ref_name }} --rebase -X ours || true
               
+              # 4. Push lên Remote
               git push origin HEAD:${{ github.ref_name }}
             fi
           else
             echo "::error::Bridges/Google-Display.js does not exist!"
             exit 1
           fi
- 
