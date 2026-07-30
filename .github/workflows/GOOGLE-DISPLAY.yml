@@ -2,7 +2,7 @@ name: GOOGLE DISPLAY PROTOCOL
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # Chạy tự động 4 tiếng một lần
+    - cron: '0 */4 * * *'
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
@@ -33,6 +33,7 @@ jobs:
           mkdir -p Modules Bridges
           if [ -f "Modules/Google-Display.py" ]; then
             python Modules/Google-Display.py
+            ls -la Bridges/
           else
             echo "::error::Không tìm thấy Modules/Google-Display.py!"
             exit 1
@@ -43,7 +44,6 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Đồng bộ lịch sử commit chống xung đột push
           git fetch origin ${{ github.ref_name }}
           git reset --soft origin/${{ github.ref_name }}
           
