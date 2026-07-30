@@ -31,7 +31,27 @@
                 "price": "99.95",
                 "availability": "https://schema.org/InStock",
                 "itemCondition": "https://schema.org/NewCondition"
-            }
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "reviewCount": "128"
+            },
+            "review": [
+                {
+                    "@type": "Review",
+                    "reviewRating": {
+                        "@type": "Rating",
+                        "ratingValue": "5",
+                        "bestRating": "5"
+                    },
+                    "author": {
+                        "@type": "Person",
+                        "name": "Tactical Gear Reviewer"
+                    },
+                    "reviewBody": "Exceptional brightness, rugged durability and outstanding battery efficiency."
+                }
+            ]
         };
         const script = document.createElement("script");
         script.type = "application/ld+json";
