@@ -2,9 +2,9 @@ name: CORE-ORCHESTRATOR
 
 on:
   schedule:
-    - cron: '0 */4 * * *'
+    - cron: '0 */4 * * *'  # Chạy tự động đồng bộ 4 tiếng / lần
   push:
-    branches: [ main ]
+    branches: [ "main", "master" ]
   workflow_dispatch:
 
 permissions:
@@ -33,22 +33,33 @@ jobs:
       - name: ⚙️ Execute Core Engine (Generate JS Bridge)
         run: |
           mkdir -p "Super Core Affiliate" "Bridges" "Protocols"
-          python "Super Core Affiliate/Super-Core-Affiliate.py"
+          if [ -f "Super Core Affiliate/Super-Core-Affiliate.py" ]; then
+            python "Super Core Affiliate/Super-Core-Affiliate.py"
+            ls -la Bridges/
+          else
+            echo "::error::Không tìm thấy Super Core Affiliate/Super-Core-Affiliate.py!"
+            exit 1
+          fi
 
       - name: 🚀 Commit & Push Bridges/Super-Core-Affiliate.js
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Đồng bộ lịch sử commit với remote
-          git fetch origin main
-          git reset --soft origin/main
+          # Đồng bộ lịch sử commit chống xung đột push
+          git fetch origin ${{ github.ref_name }}
+          git reset --soft origin/${{ github.ref_name }}
           
-          git add Bridges/Super-Core-Affiliate.js
-          
-          if git diff --staged --quiet; then
-            echo "[ESEB] Không có thay đổi nào mới trong JS Bridge."
+          if [ -f "Bridges/Super-Core-Affiliate.js" ]; then
+            git add Bridges/Super-Core-Affiliate.js
+            
+            if git diff --staged --quiet; then
+              echo "[ESEB CORE] Không có thay đổi nào mới trong JS Bridge."
+            else
+              git commit -m "build(eseb-core): auto-compile & deploy yocto telemetry bridge [skip ci]"
+              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+            fi
           else
-            git commit -m "build(eseb): auto-compile Bridges/Super-Core-Affiliate.js [skip ci]"
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+            echo "::error::Tệp Bridges/Super-Core-Affiliate.js không tồn tại!"
+            exit 1
           fi
