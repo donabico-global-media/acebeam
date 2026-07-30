@@ -1,12 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-DONABICO GLOBAL MEDIA SYSTEM
-[Google-Display.py] - PURE GOOGLE DISPLAY ADTECH ENGINE (ISOLATED MODULE)
-[V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
-"""
-
 import os
 import sys
+import datetime
 
 class IsolatedGoogleDisplayEngine:
     def __init__(self):
@@ -15,6 +9,8 @@ class IsolatedGoogleDisplayEngine:
         self.system_identity = f"{self.github_user.upper()} DISPLAY-ADTECH-MODULE"
         self.affiliate_target = "https://acebeamflashlight.sjv.io/donabio_global_media"
         self.direct_fallback = "https://www.acebeam.com/?utm_source=donabico_global_media&utm_medium=display"
+        # Bổ sung timestamp để mỗi lần chạy file JS đều có sự thay đổi nhỏ về Comment Header
+        self.build_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def compile_display_bridge(self):
         try:
@@ -26,7 +22,7 @@ class IsolatedGoogleDisplayEngine:
  * {self.brand_name}
  * {self.system_identity}
  * [Google-Display.js] - PURE ADTECH & BOT HANDSHAKE BRIDGE (ISOLATED FROM CORE)
- * [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
+ * [V-STAMP 24 AUTHENTICATED] | BUILD: {self.build_time}
  */
 (function() {{
     'use strict';
