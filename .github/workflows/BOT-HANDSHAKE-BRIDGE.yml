@@ -1,0 +1,33 @@
+name: BOT-HANDSHAKE-BRIDGE
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy-bridge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Execute Bot Handshake Engine
+        run: |
+          python Modules/Bot-Handshake-Bridge.py
+
+      - name: Auto Commit and Push Bridge JS
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add Bridges/Bot-Handshake-Bridge.js
+          git diff --quiet && git diff --staged --quiet || (git commit -m "build(eseb): auto-generate Bot-Handshake-Bridge.js [skip ci]" && git push)
