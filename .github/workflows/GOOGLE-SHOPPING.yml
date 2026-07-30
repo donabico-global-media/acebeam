@@ -2,7 +2,7 @@ name: GOOGLE SHOPPING PROTOCOL
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # Tự động cập nhật 4 giờ / lần
+    - cron: '0 */4 * * *'
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
@@ -46,11 +46,13 @@ jobs:
           git fetch origin ${{ github.ref_name }}
           git reset --soft origin/${{ github.ref_name }}
           
-          git add Feeds/shopping-feed.xml Bridges/Google-Shopping.js
+          # ĐÃ DỌN DẸP FILE CŨ VÀ THÊM FILE MỚI Shopping-Feed.xml
+          git rm --cached Feeds/shopping-feed.xml 2>/dev/null || true
+          git add Feeds/Shopping-Feed.xml Bridges/Google-Shopping.js
           
           if git diff --staged --quiet; then
-            echo "[ESEB] Tệp XML Feed và JS Bridge không có thay đổi."
+            echo "[ESEB] Không có thay đổi trong Feed hoặc Bridge."
           else
-            git commit -m "build(eseb): auto-generate merchant xml feed and shopping bridge [skip ci]"
+            git commit -m "build(eseb): update Shopping-Feed.xml filename & sync merchant bridge [skip ci]"
             git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
           fi
