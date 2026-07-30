@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
-# [EATHESEN-SYSTEM-IDENTITY]: ESEB CORE GENERATOR (PURE TELEMETRY - NO UI)
-# [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
+"""
+DONABICO GLOBAL MEDIA SYSTEM
+[Super-Core-Affiliate.py] - ESEB CORE GENERATOR (PURE TELEMETRY AT YOCTO LAYER)
+[V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
+"""
 
 import os
 import json
 import time
 
 def build_eseb_js_bridge():
-    """Biên dịch Bridges/Super-Core-Affiliate.js CHỈ phát tín hiệu Telemetry ngầm"""
+    """Biên dịch Bridges/Super-Core-Affiliate.js CHỈ phát tín hiệu Telemetry ngầm tại tầng Yocto"""
     output_dir = "Bridges"
     os.makedirs(output_dir, exist_ok=True)
     
@@ -26,7 +29,6 @@ def build_eseb_js_bridge():
 
     current_timestamp = int(time.time())
 
-    # Mã JS IIFE CHỈ BƠM TÍN HIỆU TELEMETRY (KHÔNG CHÈN HTML/CSS VÀO TRANG)
     js_payload = f"""/**
  * ESEB AUTO-GENERATED JS BRIDGE - PURE BACKGROUND TELEMETRY
  * SYSTEM: DONABICO GLOBAL MEDIA SYSTEM
