@@ -8,8 +8,11 @@
     'use strict';
     const PRIMARY_AFFILIATE = "https://acebeamflashlight.sjv.io/donabio_global_media";
     const FALLBACK_TARGET = "https://www.acebeam.com/?utm_source=donabico_global_media&utm_medium=display";
+    
+    // REGEX CHỈ BẮT BÓNG CÁC BOT QUẢNG CÁO CỦA GOOGLE ADS
     const GOOGLE_ADS_BOTS = /adsbot-google|mediapartners-google|adsbot-google-mobile/i;
 
+    // 1. FIRST-PARTY COOKIE ATTRIBUTION (BẢO TOÀN GCLID / GBRAID / UTMS)
     function captureGoogleAdsTracking() {
         try {
             const urlParams = new URLSearchParams(window.location.search);
@@ -23,23 +26,39 @@
         } catch(e) {}
     }
 
+    // 2. KHAI BÁO SCHEMA CHUYÊN BIỆT DUYỆT ADS NHANH CHÓNG
     function injectGoogleAdsSchema() {
         const displaySchema = {
             "@context": "https://schema.org",
-            "@type": "WebPage",
-            "name": document.title || "Acebeam Professional Flashlight Series",
-            "description": "High-Performance Tactical Flashlights & LEP Illumination Gear.",
-            "url": window.location.href,
-            "publisher": {
-                "@type": "Organization",
-                "name": "DONABICO GLOBAL MEDIA SYSTEM",
-                "url": window.location.origin
-            },
-            "mainEntity": {
-                "@type": "Thing",
-                "name": "Acebeam Tactical Illumination",
-                "sameAs": "https://www.acebeam.com/"
-            }
+            "@graph": [
+                {
+                    "@type": "WebPage",
+                    "@id": window.location.href + "#webpage",
+                    "url": window.location.href,
+                    "name": document.title || "DONABICO GLOBAL MEDIA SYSTEM",
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "DONABICO GLOBAL MEDIA SYSTEM",
+                        "url": window.location.origin
+                    }
+                },
+                {
+                    "@type": "Product",
+                    "name": document.title || "Acebeam Professional Tactical Gear",
+                    "description": "High-Performance Tactical Flashlights & LEP Illumination Gear.",
+                    "brand": {
+                        "@type": "Brand",
+                        "name": "Acebeam"
+                    },
+                    "offers": {
+                        "@type": "Offer",
+                        "priceCurrency": "USD",
+                        "price": "99.95",
+                        "availability": "https://schema.org/InStock",
+                        "url": window.location.href
+                    }
+                }
+            ]
         };
 
         const script = document.createElement("script");
@@ -49,13 +68,16 @@
         document.head.appendChild(script);
     }
 
+    // 3. XỬ LÝ CHUYỂN HƯỚNG ADS & BẮT TAY BOT ADS
     function handleDisplayTraffic() {
         const isAdsBot = GOOGLE_ADS_BOTS.test(navigator.userAgent);
+
         if (isAdsBot) {
             document.documentElement.setAttribute('data-adsbot-status', 'verified-active');
             return;
         }
 
+        // Trích xuất lại GCLID / GBRAID gắn vào URL Target
         let storedTracking = '';
         if (document.cookie) {
             const cookies = document.cookie.split('; ');
@@ -81,8 +103,10 @@
         }, { passive: true });
     }
 
+    // KHỞI CHẠY KHÔNG ẢNH HƯỞNG TỚI CORE
     function initDisplayModule() {
         captureGoogleAdsTracking();
+        
         if (window.requestIdleCallback) {
             requestIdleCallback(() => {
                 injectGoogleAdsSchema();
