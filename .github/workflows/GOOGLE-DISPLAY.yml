@@ -2,7 +2,7 @@ name: GOOGLE DISPLAY PROTOCOL
 
 on:
   schedule:
-    - cron: '0 */4 * * *'
+    - cron: '0 */4 * * *'  # Chạy tự động 4 tiếng một lần
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: ⚙️ Execute Real Display Compiler
+      - name: ⚙️ Execute Isolated Display Compiler
         run: |
           mkdir -p Modules Bridges
           if [ -f "Modules/Google-Display.py" ]; then
@@ -51,9 +51,9 @@ jobs:
             git add Bridges/Google-Display.js
             
             if git diff --staged --quiet; then
-              echo "[ESEB] Dữ liệu Google-Display.js trùng khớp, không có thay đổi."
+              echo "[ESEB DISPLAY] Không có thay đổi trong Google-Display.js."
             else
-              git commit -m "build(eseb): deploy real google display bot handshake bridge [skip ci]"
+              git commit -m "build(eseb-display): deploy isolated google display bridge [skip ci]"
               git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
             fi
           else
