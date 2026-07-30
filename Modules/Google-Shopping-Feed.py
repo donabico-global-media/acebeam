@@ -21,7 +21,8 @@ class ESEBShoppingEngine:
 
     def generate_shopping_xml(self):
         os.makedirs("Feeds", exist_ok=True)
-        xml_path = "Feeds/shopping-feed.xml"
+        # ĐÃ ĐỔI TÊN THÀNH Shopping-Feed.xml (Chữ S và F viết hoa)
+        xml_path = "Feeds/Shopping-Feed.xml"
 
         rss = ET.Element("rss", version="2.0")
         rss.set("xmlns:g", "http://base.google.com/ns/1.0")
@@ -37,7 +38,7 @@ class ESEBShoppingEngine:
         ET.SubElement(item, "description").text = "High-Performance Tactical Flashlights, LEP Lights and Outdoor Search Gear."
         ET.SubElement(item, "link").text = self.domain
         
-        # LINK ẢNH TRỰC TIẾP CHUẨN ĐỊNH DẠNG JPEG DÀNH CHO GOOGLE MERCHANT CENTER
+        # LINK ẢNH HỢP LỆ VỚI GOOGLE MERCHANT CENTER (ĐỊNH DẠNG JPEG)
         ET.SubElement(item, "g:image_link").text = "https://www.acebeam.com/images/thumbs/000/0003503_defender-p16-tactical-flashlight.jpeg"
         
         ET.SubElement(item, "g:availability").text = "in_stock"
