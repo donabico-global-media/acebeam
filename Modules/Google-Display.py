@@ -1,50 +1,47 @@
 # -*- coding: utf-8 -*-
 """
 DONABICO GLOBAL MEDIA SYSTEM
-[Google-Display.py] - ULTRA ESEB GOOGLE DISPLAY ENGINE (WORLD-FIRST SOTA 2026)
+[Google-Display.py] - PURE GOOGLE DISPLAY ADTECH ENGINE (ISOLATED MODULE)
 [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
 """
 
 import os
 
-class WorldFirstGoogleDisplayEngine:
+class IsolatedGoogleDisplayEngine:
     def __init__(self):
         self.github_user = os.getenv("GITHUB_REPOSITORY_OWNER", "donabico-media-system")
         self.repo_name = os.getenv("GITHUB_REPOSITORY", "donabico-media-system/acebeam").split("/")[-1]
         
         self.brand_name = "DONABICO GLOBAL MEDIA SYSTEM"
-        self.system_identity = f"{self.github_user.upper()} SOTA-DISPLAY-OMEGA"
+        self.system_identity = f"{self.github_user.upper()} DISPLAY-ADTECH-MODULE"
         self.active_border = "#10B981"  # Viền xanh lá cây chỉ thị Active Module
         self.affiliate_target = "https://acebeamflashlight.sjv.io/donabio_global_media"
-        # Direct Fallback URL nếu AdBlock chặn domain trung gian sjv.io
         self.direct_fallback = "https://www.acebeam.com/?utm_source=donabico_global_media&utm_medium=display"
 
-    def compile_sota_display(self):
+    def compile_display_bridge(self):
         os.makedirs("Bridges", exist_ok=True)
         js_path = "Bridges/Google-Display.js"
         
         js_content = f"""/**
  * {self.brand_name}
  * {self.system_identity}
- * [Google-Display.js] - ULTRA ESEB WORLD-FIRST ADTECH ENGINE
+ * [Google-Display.js] - PURE ADTECH & BOT HANDSHAKE BRIDGE (ISOLATED FROM CORE)
  * [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
  */
 (function() {{
     'use strict';
-    const SOTA_BORDER = "{self.active_border}";
-    const BRAND_NAME = "{self.brand_name}";
     const PRIMARY_AFFILIATE = "{self.affiliate_target}";
     const FALLBACK_TARGET = "{self.direct_fallback}";
     
-    // REGEX CHÍNH XÁC TOÀN BỘ CÁC DÒNG BOT DISPLAY ADS & SEARCH ROBOTS CỦA GOOGLE
-    const GOOGLE_ADS_BOTS = /adsbot-google|mediapartners-google|adsbot-google-mobile|google-read-aloud|googlebot/i;
+    // REGEX CHỈ BẮT BÓNG CÁC BOT QUẢNG CÁO CỦA GOOGLE ADS
+    const GOOGLE_ADS_BOTS = /adsbot-google|mediapartners-google|adsbot-google-mobile/i;
 
-    // 1. FIRST-PARTY COOKIE SIPHON (BẢO TOÀN DỮ LIỆU CHUYỂN ĐỔI CHUẨN PRIVACY 2026)
-    function captureAndStoreAttribution() {{
+    // 1. FIRST-PARTY COOKIE ATTRIBUTION (BẢO TOÀN GCLID / GBRAID / UTMS)
+    function captureGoogleAdsTracking() {{
         try {{
             const urlParams = new URLSearchParams(window.location.search);
-            const trackingKeys = ['gclid', 'gbraid', 'wbraid', 'utm_source', 'utm_medium', 'utm_campaign'];
-            trackingKeys.forEach(key => {{
+            const adKeys = ['gclid', 'gbraid', 'wbraid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
+            adKeys.forEach(key => {{
                 if (urlParams.has(key)) {{
                     const val = urlParams.get(key);
                     document.cookie = `${{key}}=${{encodeURIComponent(val)}}; path=/; max-age=2592000; SameSite=Lax`;
@@ -53,19 +50,19 @@ class WorldFirstGoogleDisplayEngine:
         }} catch(e) {{}}
     }}
 
-    // 2. KHAI BÁO SCHEMA SANH ĐIỆU GIÚP GOOGLE ADS BẮT TAY & DUYỆT ADS TRONG 5 PHÚT
-    function injectRealAdsSchema() {{
-        const productSchema = {{
+    // 2. KHAI BÁO SCHEMA CHUYÊN BIỆT DUYỆT ADS NHANH CHÓNG
+    function injectGoogleAdsSchema() {{
+        const displaySchema = {{
             "@context": "https://schema.org",
             "@graph": [
                 {{
                     "@type": "WebPage",
                     "@id": window.location.href + "#webpage",
                     "url": window.location.href,
-                    "name": document.title || BRAND_NAME,
+                    "name": document.title || "{self.brand_name}",
                     "publisher": {{
                         "@type": "Organization",
-                        "name": BRAND_NAME,
+                        "name": "{self.brand_name}",
                         "url": window.location.origin
                     }}
                 }},
@@ -90,78 +87,74 @@ class WorldFirstGoogleDisplayEngine:
 
         const script = document.createElement("script");
         script.type = "application/ld+json";
-        script.id = "eseb-sota-display-schema";
-        script.text = JSON.stringify(productSchema);
+        script.id = "eseb-display-ads-schema";
+        script.text = JSON.stringify(displaySchema);
         document.head.appendChild(script);
     }}
 
-    // 3. THIẾT LẬP LÁ CHẮN ANTI-ADBLOCK & CHUYỂN HƯỚNG THÔNG MINH
-    function setupSmartCTAEngines() {{
-        const isBot = GOOGLE_ADS_BOTS.test(navigator.userAgent);
+    // 3. XỬ LÝ CHUYỂN HƯỚNG ADS & BẮT TAY BOT ADS
+    function handleDisplayTraffic() {{
+        const isAdsBot = GOOGLE_ADS_BOTS.test(navigator.userAgent);
 
-        if (isBot) {{
+        if (isAdsBot) {{
             document.documentElement.setAttribute('data-adsbot-status', 'verified-active');
-            document.documentElement.setAttribute('data-sota-active', 'true');
             return;
         }}
 
-        // Lấy lại First-Party Cookie để nối vào URL Target
+        // Trích xuất lại GCLID / GBRAID gắn vào URL Target
         let storedTracking = '';
         if (document.cookie) {{
             const cookies = document.cookie.split('; ');
             cookies.forEach(c => {{
-                if (c.startsWith('gclid=') || c.startsWith('gbraid=')) {{
+                if (c.startsWith('gclid=') || c.startsWith('gbraid=') || c.startsWith('wbraid=')) {{
                     storedTracking += '&' + c;
                 }}
             }});
         }}
 
-        const finalAffiliateUrl = PRIMARY_AFFILIATE + (storedTracking ? '?' + storedTracking.substring(1) : '');
+        const finalTargetUrl = PRIMARY_AFFILIATE + (storedTracking ? '?' + storedTracking.substring(1) : '');
 
-        // Gắn sự kiện Click Delegation chuẩn INP 0ms
         document.body.addEventListener('click', function(e) {{
-            const targetBtn = e.target.closest('a, .action-link, button[data-href]');
-            if (targetBtn) {{
-                const href = targetBtn.getAttribute('href');
+            const btn = e.target.closest('a.display-cta, button.display-cta, [data-display-link]');
+            if (btn) {{
+                const href = btn.getAttribute('href');
                 if (!href || href === '#' || href === '') {{
-                    // Kiểm tra xem AdBlock có block link trung gian hay không
-                    targetBtn.setAttribute('href', finalAffiliateUrl);
-                    targetBtn.setAttribute('target', '_blank');
-                    targetBtn.setAttribute('rel', 'noopener sponsored');
+                    btn.setAttribute('href', finalTargetUrl);
+                    btn.setAttribute('target', '_blank');
+                    btn.setAttribute('rel', 'noopener sponsored');
                 }}
             }}
         }}, {{ passive: true }});
     }}
 
-    // 4. LẬP TRÌNH LAZY-BIND (BẢO VỆ ĐIỂM PAGESPEED PERFECT 100)
-    function initializeEcosystem() {{
-        captureAndStoreAttribution();
+    // KHỞI CHẠY KHÔNG ẢNH HƯỞNG TỚI CORE
+    function initDisplayModule() {{
+        captureGoogleAdsTracking();
         
         if (window.requestIdleCallback) {{
             requestIdleCallback(() => {{
-                injectRealAdsSchema();
-                setupSmartCTAEngines();
+                injectGoogleAdsSchema();
+                handleDisplayTraffic();
             }});
         }} else {{
             setTimeout(() => {{
-                injectRealAdsSchema();
-                setupSmartCTAEngines();
+                injectGoogleAdsSchema();
+                handleDisplayTraffic();
             }}, 0);
         }}
     }}
 
     if (document.readyState === 'loading') {{
-        document.addEventListener('DOMContentLoaded', initializeEcosystem);
+        document.addEventListener('DOMContentLoaded', initDisplayModule);
     }} else {{
-        initializeEcosystem();
+        initDisplayModule();
     }}
 }})();
 """
         with open(js_path, "w", encoding="utf-8") as f:
             f.write(js_content)
-        print(f"[Success] World-First SOTA Display Bridge deployed at {js_path}")
+        print(f"[SUCCESS] Google Display Bridge compiled at {js_path}")
 
 if __name__ == "__main__":
-    engine = WorldFirstGoogleDisplayEngine()
-    engine.compile_sota_display()
- 
+    engine = IsolatedGoogleDisplayEngine()
+    engine.compile_display_bridge()
