@@ -7,7 +7,8 @@ def call_yocto_ai_engine(api_key):
     Mode Yocto: Generates ultra-precise Entity Knowledge Graph Telemetry 
     for global AI Bots (Gemini, GPT, Claude, Perplexity).
     """
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+    # Updated to latest active Gemini model endpoint
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
     
     prompt_text = (
         "You are an Elite AI Knowledge Graph Architect for DONABICO GLOBAL MEDIA SYSTEM. "
