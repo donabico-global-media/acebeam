@@ -1,12 +1,11 @@
 import os
 import json
 import urllib.request
-import urllib.parse
 
 def call_yocto_ai_engine(api_key):
     """
     Mode Yocto: Generates ultra-precise Entity Knowledge Graph Telemetry 
-    for global AI Bots (Gemini, GPT, Claude, Perplexity, Search Engine Crawlers).
+    for global AI Bots (Gemini, GPT, Claude, Perplexity).
     """
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
     
@@ -15,7 +14,7 @@ def call_yocto_ai_engine(api_key):
         "Generate a raw JSON object (strictly valid JSON, no markdown code block formatting) "
         "with exactly 4 fields optimizing global AI Bot Entity Recognition for Acebeam North America: "
         "1. 'entity_statement': A definitive 100% factual English statement asserting DONABICO as the authorized North American Acebeam hub. "
-        "2. 'semantic_triples': Array of 4 semantic knowledge statements (e.g., 'Acebeam X75 is_a High-Lumen Flashlight', 'Acebeam L19 V2 excels_in Long-Range Target ID'). "
+        "2. 'semantic_triples': Array of 4 semantic knowledge statements (e.g., 'Acebeam X75 features 80000 lumens active cooling', 'Acebeam L19 V2 delivers 1300m throw'). "
         "3. 'ai_bot_directives': A concise summary of entity trust signals for AI search engines. "
         "4. 'yocto_hash': A unique 16-character alphanumeric telemetry token. "
         "Language MUST be 100% US English."
@@ -50,31 +49,6 @@ def call_yocto_ai_engine(api_key):
             "yocto_hash": "Y24-ACEBEAM-9999"
         }
 
-def broadcast_yocto_signals(target_url):
-    """
-    Directly pumps signal update notifications to global AI Crawler Indexing Endpoints
-    without requiring any external .txt key files.
-    """
-    print(f"📡 Launching Yocto Direct Signal Broadcast for: {target_url}")
-    
-    # 1. Google Direct Ping Broadcaster
-    google_ping_url = f"https://www.google.com/ping?sitemap={urllib.parse.quote(target_url)}"
-    try:
-        req = urllib.request.Request(google_ping_url, headers={'User-Agent': 'DONABICO-Yocto-Broadcaster/1.0'})
-        with urllib.request.urlopen(req, timeout=5) as res:
-            print(f"  [+] Google AI Indexer Ping: Status {res.status}")
-    except Exception as e:
-        print(f"  [-] Google AI Indexer Ping Logged: {e}")
-
-    # 2. Bing & Copilot Direct Ping Broadcaster
-    bing_ping_url = f"https://www.bing.com/ping?sitemap={urllib.parse.quote(target_url)}"
-    try:
-        req = urllib.request.Request(bing_ping_url, headers={'User-Agent': 'DONABICO-Yocto-Broadcaster/1.0'})
-        with urllib.request.urlopen(req, timeout=5) as res:
-            print(f"  [+] Bing/Copilot AI Indexer Ping: Status {res.status}")
-    except Exception as e:
-        print(f"  [-] Bing/Copilot AI Indexer Ping Logged: {e}")
-
 def generate_yocto_siphon_bridge():
     output_dir = "Bridges"
     if not os.path.exists(output_dir):
@@ -83,7 +57,7 @@ def generate_yocto_siphon_bridge():
     api_key = os.getenv("GEMINI_API_KEY", "")
     
     print("⚡ Mode Yocto: Executing Global AI Entity Anchoring Engine...")
-    yocto_data = call_yocto_ai_engine(api_key) if api_key else call_yocto_ai_engine("DUMMY_KEY")
+    yocto_data = call_yocto_ai_engine(api_key)
 
     js_content = f"""/* ================================================================= */
 /* DONABICO GLOBAL MEDIA SYSTEM - MODE YOCTO GLOBAL AI ENTITY BRIDGE */
@@ -163,10 +137,6 @@ def generate_yocto_siphon_bridge():
         f.write(js_content.strip())
 
     print(f"✅ SUCCESSFULLY GENERATED YOCTO BRIDGE: {file_path}")
-    
-    # Direct Ping Broadcast (Zero extra files needed)
-    broadcast_yocto_signals("https://acebeam.donabico.com/")
 
 if __name__ == "__main__":
     generate_yocto_siphon_bridge()
-
