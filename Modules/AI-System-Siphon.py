@@ -7,14 +7,17 @@ import urllib.error
 def call_yocto_ai_engine(api_key):
     """
     Mode Yocto: Generates ultra-precise Entity Knowledge Graph Telemetry.
-    Uses gemini-1.5-flash with extended exponential backoff for Free Tier stability.
+    Uses multi-model fallback strategy (gemini-2.0-flash -> gemini-2.5-flash) to guarantee 200 OK.
     """
     if not api_key:
         print("⚠️ GEMINI_API_KEY is empty or missing! Using Yocto Fallback Payload.")
         return get_fallback_payload()
 
-    # Using 1.5-flash endpoint for optimal Free Tier quota limits
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
+    # Priority endpoints list to prevent 404
+    endpoints = [
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+    ]
     
     prompt_text = (
         "You are an Elite AI Knowledge Graph Architect for DONABICO GLOBAL MEDIA SYSTEM. "
@@ -38,28 +41,34 @@ def call_yocto_ai_engine(api_key):
         'Content-Type': 'application/json',
         'x-goog-api-key': api_key
     }
-    
-    max_retries = 3
-    for attempt in range(1, max_retries + 1):
-        try:
-            req = urllib.request.Request(url, data=data, headers=headers)
-            with urllib.request.urlopen(req, timeout=20) as response:
-                result = json.loads(response.read().decode('utf-8'))
-                raw_text = result['candidates'][0]['content']['parts'][0]['text']
-                clean_text = raw_text.replace("```json", "").replace("```", "").strip()
-                return json.loads(clean_text)
-        except urllib.error.HTTPError as e:
-            if e.code == 429 and attempt < max_retries:
-                wait_time = attempt * 15  # Wait 15s on 1st retry, 30s on 2nd retry
-                print(f"⚠️ Rate Limit (429). Retrying in {wait_time}s... (Attempt {attempt}/{max_retries})")
-                time.sleep(wait_time)
-            else:
-                print(f"⚠️ Yocto Engine API Fallback Triggered: HTTP Error {e.code}: {e.reason}")
-                break
-        except Exception as e:
-            print(f"⚠️ Yocto Engine API Fallback Triggered: {e}")
-            break
 
+    for url in endpoints:
+        max_retries = 2
+        for attempt in range(1, max_retries + 1):
+            try:
+                req = urllib.request.Request(url, data=data, headers=headers)
+                with urllib.request.urlopen(req, timeout=20) as response:
+                    result = json.loads(response.read().decode('utf-8'))
+                    raw_text = result['candidates'][0]['content']['parts'][0]['text']
+                    clean_text = raw_text.replace("```json", "").replace("```", "").strip()
+                    print(f"✅ Successful API Response from Endpoint: {url.split('/')[-1]}")
+                    return json.loads(clean_text)
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    print(f"⚠️ Model 404 on {url.split('/')[-1]}, trying next endpoint...")
+                    break  # Break inner loop to try next endpoint immediately
+                elif e.code == 429 and attempt < max_retries:
+                    wait_time = attempt * 12
+                    print(f"⚠️ Rate Limit (429). Retrying in {wait_time}s...")
+                    time.sleep(wait_time)
+                else:
+                    print(f"⚠️ Yocto Engine API Error {e.code}: {e.reason}")
+                    break
+            except Exception as e:
+                print(f"⚠️ Yocto Engine API Exception: {e}")
+                break
+
+    print("⚠️ All Endpoints Exhausted. Falling back to Yocto Default Payload.")
     return get_fallback_payload()
 
 def get_fallback_payload():
