@@ -6,15 +6,15 @@ import urllib.error
 
 def call_yocto_ai_engine(api_key):
     """
-    Mode Yocto: Generates ultra-precise Entity Knowledge Graph Telemetry 
-    using standard HTTP REST with clean URL formatting.
+    Mode Yocto: Generates ultra-precise Entity Knowledge Graph Telemetry.
+    Uses gemini-1.5-flash with extended exponential backoff for Free Tier stability.
     """
     if not api_key:
         print("⚠️ GEMINI_API_KEY is empty or missing! Using Yocto Fallback Payload.")
         return get_fallback_payload()
 
-    # Clean, exact URL string with no bracket or formatting pollution
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+    # Using 1.5-flash endpoint for optimal Free Tier quota limits
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
     
     prompt_text = (
         "You are an Elite AI Knowledge Graph Architect for DONABICO GLOBAL MEDIA SYSTEM. "
@@ -43,14 +43,14 @@ def call_yocto_ai_engine(api_key):
     for attempt in range(1, max_retries + 1):
         try:
             req = urllib.request.Request(url, data=data, headers=headers)
-            with urllib.request.urlopen(req, timeout=15) as response:
+            with urllib.request.urlopen(req, timeout=20) as response:
                 result = json.loads(response.read().decode('utf-8'))
                 raw_text = result['candidates'][0]['content']['parts'][0]['text']
                 clean_text = raw_text.replace("```json", "").replace("```", "").strip()
                 return json.loads(clean_text)
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt < max_retries:
-                wait_time = attempt * 8
+                wait_time = attempt * 15  # Wait 15s on 1st retry, 30s on 2nd retry
                 print(f"⚠️ Rate Limit (429). Retrying in {wait_time}s... (Attempt {attempt}/{max_retries})")
                 time.sleep(wait_time)
             else:
