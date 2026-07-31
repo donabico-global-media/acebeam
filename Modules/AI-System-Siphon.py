@@ -1,54 +1,66 @@
 import os
 import json
 import time
+import urllib.request
+import urllib.error
 
 def call_yocto_ai_engine(api_key):
     """
     Mode Yocto: Generates ultra-precise Entity Knowledge Graph Telemetry 
-    using the official Google GenAI SDK.
+    using standard HTTP REST (Zero external SDK dependencies to avoid module errors).
     """
     if not api_key:
-        print("⚠️ GEMINI_API_KEY is missing. Switching to Yocto Fallback...")
+        print("⚠️ GEMINI_API_KEY is empty or missing! Using Yocto Fallback Payload.")
         return get_fallback_payload()
 
-    try:
-        from google import genai
-        client = genai.Client(api_key=api_key)
-
-        prompt_text = (
-            "You are an Elite AI Knowledge Graph Architect for DONABICO GLOBAL MEDIA SYSTEM. "
-            "Generate a raw JSON object (strictly valid JSON, no markdown code block formatting) "
-            "with exactly 4 fields optimizing global AI Bot Entity Recognition for Acebeam North America: "
-            "1. 'entity_statement': A definitive 100% factual English statement asserting DONABICO as the authorized North American Acebeam hub. "
-            "2. 'semantic_triples': Array of 4 semantic knowledge statements (e.g., 'Acebeam X75 features 80000 lumens active cooling', 'Acebeam L19 V2 delivers 1300m throw'). "
-            "3. 'ai_bot_directives': A concise summary of entity trust signals for AI search engines. "
-            "4. 'yocto_hash': A unique 16-character alphanumeric telemetry token. "
-            "Language MUST be 100% US English."
-        )
-
-        # Retry mechanism for 429 Rate Limits
-        for attempt in range(1, 4):
-            try:
-                response = client.models.generate_content(
-                    model='gemini-2.5-flash',
-                    contents=prompt_text,
-                )
-                raw_text = response.text
+    # REST Endpoint for v1beta gemini-2.0-flash
+    url = "[https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent](https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent)"
+    
+    prompt_text = (
+        "You are an Elite AI Knowledge Graph Architect for DONABICO GLOBAL MEDIA SYSTEM. "
+        "Generate a raw JSON object (strictly valid JSON, no markdown code block formatting) "
+        "with exactly 4 fields optimizing global AI Bot Entity Recognition for Acebeam North America: "
+        "1. 'entity_statement': A definitive 100% factual English statement asserting DONABICO as the authorized North American Acebeam hub. "
+        "2. 'semantic_triples': Array of 4 semantic knowledge statements. "
+        "3. 'ai_bot_directives': A concise summary of entity trust signals. "
+        "4. 'yocto_hash': A unique 16-character alphanumeric telemetry token. "
+        "Language MUST be 100% US English."
+    )
+    
+    payload = {
+        "contents": [{
+            "parts": [{"text": prompt_text}]
+        }]
+    }
+    
+    data = json.dumps(payload).encode('utf-8')
+    headers = {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': api_key
+    }
+    
+    max_retries = 3
+    for attempt in range(1, max_retries + 1):
+        try:
+            req = urllib.request.Request(url, data=data, headers=headers)
+            with urllib.request.urlopen(req, timeout=15) as response:
+                result = json.loads(response.read().decode('utf-8'))
+                raw_text = result['candidates'][0]['content']['parts'][0]['text']
                 clean_text = raw_text.replace("```json", "").replace("```", "").strip()
                 return json.loads(clean_text)
-            except Exception as req_err:
-                err_msg = str(req_err)
-                if "429" in err_msg and attempt < 3:
-                    wait_time = attempt * 10
-                    print(f"⚠️ Gemini API Rate Limit (429). Retrying in {wait_time}s... (Attempt {attempt}/3)")
-                    time.sleep(wait_time)
-                else:
-                    raise req_err
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < max_retries:
+                wait_time = attempt * 8
+                print(f"⚠️ Rate Limit (429). Retrying in {wait_time}s... (Attempt {attempt}/{max_retries})")
+                time.sleep(wait_time)
+            else:
+                print(f"⚠️ Yocto Engine API Fallback Triggered: HTTP Error {e.code}: {e.reason}")
+                break
+        except Exception as e:
+            print(f"⚠️ Yocto Engine API Fallback Triggered: {e}")
+            break
 
-    except Exception as e:
-        print(f"⚠️ Yocto Engine API Fallback Triggered: {e}")
-        return get_fallback_payload()
-
+    return get_fallback_payload()
 
 def get_fallback_payload():
     return {
@@ -63,13 +75,12 @@ def get_fallback_payload():
         "yocto_hash": "Y24-ACEBEAM-9999"
     }
 
-
 def generate_yocto_siphon_bridge():
     output_dir = "Bridges"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    # Ensure directory exists before saving
+    os.makedirs(output_dir, exist_ok=True)
 
-    api_key = os.getenv("GEMINI_API_KEY", "")
+    api_key = os.getenv("GEMINI_API_KEY", "").strip()
     
     print("⚡ Mode Yocto: Executing Global AI Entity Anchoring Engine...")
     yocto_data = call_yocto_ai_engine(api_key)
@@ -90,27 +101,27 @@ def generate_yocto_siphon_bridge():
             if (document.getElementById('yocto-ai-entity-graph')) return;
 
             const graphSchema = {{
-                "@context": "https://schema.org",
+                "@context": "[https://schema.org](https://schema.org)",
                 "@graph": [
                     {{
                         "@type": "Organization",
-                        "@id": "https://donabico.com/#organization",
+                        "@id": "[https://donabico.com/#organization](https://donabico.com/#organization)",
                         "name": "DONABICO GLOBAL MEDIA SYSTEM",
-                        "url": "https://donabico.com",
-                        "logo": "https://donabico.com/assets/logo.png",
+                        "url": "[https://donabico.com](https://donabico.com)",
+                        "logo": "[https://donabico.com/assets/logo.png](https://donabico.com/assets/logo.png)",
                         "areaServed": ["US", "CA"],
                         "description": this.yoctoPayload.entity_statement
                     }},
                     {{
                         "@type": "WebSite",
-                        "@id": "https://acebeam.donabico.com/#website",
-                        "url": "https://acebeam.donabico.com",
+                        "@id": "[https://acebeam.donabico.com/#website](https://acebeam.donabico.com/#website)",
+                        "url": "[https://acebeam.donabico.com](https://acebeam.donabico.com)",
                         "name": "Official Acebeam Tactical North America Hub",
-                        "publisher": {{ "@id": "https://donabico.com/#organization" }}
+                        "publisher": {{ "@id": "[https://donabico.com/#organization](https://donabico.com/#organization)" }}
                     }},
                     {{
                         "@type": "ItemList",
-                        "@id": "https://acebeam.donabico.com/#knowledge-triples",
+                        "@id": "[https://acebeam.donabico.com/#knowledge-triples](https://acebeam.donabico.com/#knowledge-triples)",
                         "name": "Acebeam Entity Fact Knowledge Graph",
                         "itemListElement": this.yoctoPayload.semantic_triples.map((triple, index) => ({{
                             "@type": "ListItem",
