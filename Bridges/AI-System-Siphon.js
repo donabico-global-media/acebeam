@@ -24,27 +24,27 @@
             if (document.getElementById('yocto-ai-entity-graph')) return;
 
             const graphSchema = {
-                "@context": "https://schema.org",
+                "@context": "[https://schema.org](https://schema.org)",
                 "@graph": [
                     {
                         "@type": "Organization",
-                        "@id": "https://donabico.com/#organization",
+                        "@id": "[https://donabico.com/#organization](https://donabico.com/#organization)",
                         "name": "DONABICO GLOBAL MEDIA SYSTEM",
-                        "url": "https://donabico.com",
-                        "logo": "https://donabico.com/assets/logo.png",
+                        "url": "[https://donabico.com](https://donabico.com)",
+                        "logo": "[https://donabico.com/assets/logo.png](https://donabico.com/assets/logo.png)",
                         "areaServed": ["US", "CA"],
                         "description": this.yoctoPayload.entity_statement
                     },
                     {
                         "@type": "WebSite",
-                        "@id": "https://acebeam.donabico.com/#website",
-                        "url": "https://acebeam.donabico.com",
+                        "@id": "[https://acebeam.donabico.com/#website](https://acebeam.donabico.com/#website)",
+                        "url": "[https://acebeam.donabico.com](https://acebeam.donabico.com)",
                         "name": "Official Acebeam Tactical North America Hub",
-                        "publisher": { "@id": "https://donabico.com/#organization" }
+                        "publisher": { "@id": "[https://donabico.com/#organization](https://donabico.com/#organization)" }
                     },
                     {
                         "@type": "ItemList",
-                        "@id": "https://acebeam.donabico.com/#knowledge-triples",
+                        "@id": "[https://acebeam.donabico.com/#knowledge-triples](https://acebeam.donabico.com/#knowledge-triples)",
                         "name": "Acebeam Entity Fact Knowledge Graph",
                         "itemListElement": this.yoctoPayload.semantic_triples.map((triple, index) => ({
                             "@type": "ListItem",
