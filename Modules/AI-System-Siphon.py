@@ -7,14 +7,14 @@ import urllib.error
 def call_yocto_ai_engine(api_key):
     """
     Mode Yocto: Generates ultra-precise Entity Knowledge Graph Telemetry 
-    using standard HTTP REST (Zero external SDK dependencies to avoid module errors).
+    using standard HTTP REST with clean URL formatting.
     """
     if not api_key:
         print("⚠️ GEMINI_API_KEY is empty or missing! Using Yocto Fallback Payload.")
         return get_fallback_payload()
 
-    # REST Endpoint for v1beta gemini-2.0-flash
-    url = "[https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent](https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent)"
+    # Clean, exact URL string with no bracket or formatting pollution
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
     
     prompt_text = (
         "You are an Elite AI Knowledge Graph Architect for DONABICO GLOBAL MEDIA SYSTEM. "
@@ -77,7 +77,6 @@ def get_fallback_payload():
 
 def generate_yocto_siphon_bridge():
     output_dir = "Bridges"
-    # Ensure directory exists before saving
     os.makedirs(output_dir, exist_ok=True)
 
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
@@ -101,27 +100,27 @@ def generate_yocto_siphon_bridge():
             if (document.getElementById('yocto-ai-entity-graph')) return;
 
             const graphSchema = {{
-                "@context": "[https://schema.org](https://schema.org)",
+                "@context": "https://schema.org",
                 "@graph": [
                     {{
                         "@type": "Organization",
-                        "@id": "[https://donabico.com/#organization](https://donabico.com/#organization)",
+                        "@id": "https://donabico.com/#organization",
                         "name": "DONABICO GLOBAL MEDIA SYSTEM",
-                        "url": "[https://donabico.com](https://donabico.com)",
-                        "logo": "[https://donabico.com/assets/logo.png](https://donabico.com/assets/logo.png)",
+                        "url": "https://donabico.com",
+                        "logo": "https://donabico.com/assets/logo.png",
                         "areaServed": ["US", "CA"],
                         "description": this.yoctoPayload.entity_statement
                     }},
                     {{
                         "@type": "WebSite",
-                        "@id": "[https://acebeam.donabico.com/#website](https://acebeam.donabico.com/#website)",
-                        "url": "[https://acebeam.donabico.com](https://acebeam.donabico.com)",
+                        "@id": "https://acebeam.donabico.com/#website",
+                        "url": "https://acebeam.donabico.com",
                         "name": "Official Acebeam Tactical North America Hub",
-                        "publisher": {{ "@id": "[https://donabico.com/#organization](https://donabico.com/#organization)" }}
+                        "publisher": {{ "@id": "https://donabico.com/#organization" }}
                     }},
                     {{
                         "@type": "ItemList",
-                        "@id": "[https://acebeam.donabico.com/#knowledge-triples](https://acebeam.donabico.com/#knowledge-triples)",
+                        "@id": "https://acebeam.donabico.com/#knowledge-triples",
                         "name": "Acebeam Entity Fact Knowledge Graph",
                         "itemListElement": this.yoctoPayload.semantic_triples.map((triple, index) => ({{
                             "@type": "ListItem",
