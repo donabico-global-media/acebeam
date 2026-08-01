@@ -2,8 +2,8 @@ name: SIPHON-TRAFFIC-ENGINE
 
 on:
   schedule:
-    - cron: '0 */4 * * *'
-  workflow_dispatch:
+    - cron: '0 */4 * * *'  # Tự động chạy mỗi 4 giờ
+  workflow_dispatch:        # Kích hoạt chạy thủ công từ GitHub Actions UI
 
 jobs:
   run-siphon-engine:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Kéo toàn bộ lịch sử Git để tránh xung đột branch
+          fetch-depth: 0    # Kéo toàn bộ lịch sử Git để xử lý đồng bộ mượt mà
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,7 +30,16 @@ jobs:
         run: |
           git config --global user.name "EATHESEN-BOT"
           git config --global user.email "bot@donabico.com"
+
+          # 1. Đồng bộ Remote branch mà không làm mất tài sản mới do Python vừa sinh ra
+          git fetch origin main
+          git reset --soft origin main
+
+          # 2. Đưa các tài sản tự động vào Staging Area
           git add Bridges/Siphon-Traffic-Engine.js Data/eseb_feed.xml
-          git commit -m "update: Brand Repositories ESEB Assets" || exit 0
-          git pull --rebase origin main
+
+          # 3. Commit nếu có thay đổi mới
+          git commit -m "update: Brand Repositories ESEB Assets [skip ci]" || exit 0
+
+          # 4. Push trực tiếp lên main mà không bị chặn xung đột
           git push origin main
