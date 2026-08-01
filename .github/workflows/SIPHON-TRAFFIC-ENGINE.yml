@@ -27,21 +27,19 @@ jobs:
         run: |
           python Modules/Siphon-Traffic-Engine.py
 
-      - name: Commit & Push Brand Repository Assets
+      - name: Commit & Push JS Bridge Asset Only
         run: |
           git config --global user.name "EATHESEN-BOT"
           git config --global user.email "bot@donabico.com"
 
-          # 1. Đồng bộ remote URL chính xác
+          # Synchronize Remote Branch
           git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git fetch origin ${{ github.ref_name }}
-
-          # 2. Reset soft về HEAD của Remote để giữ nguyên file Python mới tạo
           git reset --soft "origin/${{ github.ref_name }}"
 
-          # 3. Add và Commit
-          git add Bridges/Siphon-Traffic-Engine.js Data/eseb_feed.xml
-          git commit -m "update: Brand Repositories ESEB Assets [skip ci]" || exit 0
+          # Commit ONLY JS Bridge
+          git add Bridges/Siphon-Traffic-Engine.js
+          git commit -m "update: Pure ESEB JS Bridge [skip ci]" || exit 0
 
-          # 4. Push an toàn lên nhánh chính
+          # Push to main
           git push origin "HEAD:${{ github.ref_name }}"
