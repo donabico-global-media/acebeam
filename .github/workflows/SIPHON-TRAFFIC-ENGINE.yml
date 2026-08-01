@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Kéo toàn bộ lịch sử Git để tránh xung đột branch
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -28,6 +30,7 @@ jobs:
         run: |
           git config --global user.name "EATHESEN-BOT"
           git config --global user.email "bot@donabico.com"
-          git add Bridges/Siphon-Traffic-Engine.js Data/ *feed.xml || exit 0
+          git add Bridges/Siphon-Traffic-Engine.js Data/eseb_feed.xml
           git commit -m "update: Brand Repositories ESEB Assets" || exit 0
-          git push
+          git pull --rebase origin main
+          git push origin main
