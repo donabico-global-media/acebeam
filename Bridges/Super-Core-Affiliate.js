@@ -2,12 +2,12 @@
  * ESEB AUTO-GENERATED JS BRIDGE - PURE BACKGROUND TELEMETRY
  * SYSTEM: DONABICO GLOBAL MEDIA SYSTEM
  * [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
- * TIMESTAMP: 1785553076
+ * TIMESTAMP: 1785565006
  */
 (function() {
     'use strict';
     const CONFIG = {
-        targetUrl: "#INSERT_YOUR_AFFILIATE_LINK_HERE",
+        targetUrl: "https://donabico-global-media.github.io/shop/8000kicks.html",
         indexKey: "aeth24e38f9024240000000000000000"
     };
 
