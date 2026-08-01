@@ -4,17 +4,17 @@ import json
 import urllib.request
 import urllib.error
 
-# DOMAIN CẤU HÌNH CHUẨN
+# DOMAIN CẤU HÌNH CHUẨN ĐỊNH HỆ THỐNG
 BASE_DOMAIN = "https://donabico-media-system.github.io"
 BRANDS_DIR = "brands"
 
-# Danh sách file hệ thống/xác minh CẦN LOẠI TRỪ
+# BỘ LỌC LOẠI TRỪ CÁC TỆP HỆ THỐNG/XÁC MINH
 EXCLUDED_FILES = ["index.html", "404.html", "googleff2d9bee01c132b5.html"]
 
 def discover_brand_repositories():
     """
-    DYNAMIC BRAND DISCOVERY AGENT:
-    Tự động quét Kho thương hiệu độc lập và BỎ QUA các file xác minh/hệ thống.
+    AUTONOMOUS BRAND DISCOVERY AGENT:
+    Tự động quét các Kho thương hiệu độc lập trong hệ thống mà không cần khai báo thủ công.
     """
     print(f"🔍 [AUTO-DISCOVERY] Scanning Brand Repositories for BASE_DOMAIN: {BASE_DOMAIN}")
     discovered_brands = []
@@ -27,7 +27,7 @@ def discover_brand_repositories():
             
             if file_name_lower.endswith(".html"):
                 if file_name_lower in EXCLUDED_FILES or file_name_lower.startswith("google"):
-                    print(f"🛡️ [FILTER] Excluded System/Verification File: {file_name}")
+                    print(f"🛡️ [FILTER] Excluded System File: {file_name}")
                     continue
 
                 file_path = os.path.join(root, file_name)
@@ -66,7 +66,7 @@ def parse_brand_metadata(file_path, file_name):
         return None
 
 def harvest_brand_ehc(api_key, brands):
-    print("⚡ [EHC CORE] Harvesting Entity Clusters across Independent Brand Repositories...")
+    print("⚡ [EHC CORE] Harvesting AI Entity Clusters for Autonomous Traffic...")
     all_clusters = []
 
     if not brands:
@@ -107,7 +107,7 @@ def call_gemini_for_brand(api_key, brand):
             result = json.loads(response.read().decode('utf-8'))
             raw_text = result['candidates'][0]['content']['parts'][0]['text']
             clean_text = raw_text.replace("```json", "").replace("```", "").strip()
-            print(f"✅ [EHC CORE] Brand Entity Cluster Generated: {brand['brand_name']}")
+            print(f"✅ [EHC CORE] AI Entity Cluster Generated: {brand['brand_name']}")
             return json.loads(clean_text)
     except Exception as e:
         print(f"⚠️ [EHC CORE] Gemini API fallback for {brand['brand_name']}: {e}")
@@ -123,11 +123,11 @@ def get_fallback_brand_data(brand):
     }
 
 def broadcast_eseb_events(clusters):
-    print("⚡ [ESEB CORE] Broadcasting In-Memory Events directly to Search & AI Engines...")
+    print("⚡ [ESEB CORE] Direct In-Memory Broadcasting to Search & AI Engines...")
 
     urls_to_broadcast = [item['url'] for item in clusters]
 
-    # 1. PURE ESEB DIRECT HTTP BROADCAST (INDEXNOW PROTOCOL)
+    # 1. PHÁT SÓNG TRỰC TIẾP API INDEXNOW (TỰ ĐỘNG ÉP BỌ AI PHẢI INDEX)
     host = "donabico-media-system.github.io"
     indexnow_key = "e24e24e24e24e24e24e24e24e24e24e2"
     endpoint = "https://api.indexnow.org/indexnow"
@@ -144,11 +144,11 @@ def broadcast_eseb_events(clusters):
         req = urllib.request.Request(endpoint, data=data, headers={'Content-Type': 'application/json; charset=utf-8'})
         with urllib.request.urlopen(req, timeout=10) as response:
             if response.status in [200, 202]:
-                print(f"🚀 [ESEB PURE BROADCAST] Successfully notified AI Engines for {len(urls_to_broadcast)} URLs!")
+                print(f"🚀 [ESEB BROADCAST] IndexNow API Notified for {len(urls_to_broadcast)} URLs!")
     except Exception as e:
         print(f"⚠️ [ESEB] IndexNow Notice: {e}")
 
-    # 2. GENERATE JS BRIDGE ONLY
+    # 2. XUẤT CẦU NỐI JAVASCRIPT DUY NHẤT
     generate_brand_js_bridge(clusters)
 
 def generate_brand_js_bridge(clusters):
@@ -215,7 +215,7 @@ def generate_brand_js_bridge(clusters):
 """
     with open("Bridges/Siphon-Traffic-Engine.js", "w", encoding="utf-8") as f:
         f.write(js_content)
-    print("✅ [ESEB] Single JS Bridge Generated: Bridges/Siphon-Traffic-Engine.js")
+    print("✅ [ESEB] JS Bridge Asset Generated: Bridges/Siphon-Traffic-Engine.js")
 
 if __name__ == "__main__":
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
