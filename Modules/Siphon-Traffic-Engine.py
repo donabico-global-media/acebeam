@@ -3,31 +3,39 @@ import re
 import json
 import urllib.request
 import urllib.error
-from datetime import datetime
 
-BASE_DOMAIN = "https://donabico-global-media.github.io"
-BRANDS_DIR = "brands"  # Quét trực tiếp danh mục các Kho thương hiệu
+# DOMAIN CẤU HÌNH CHUẨN
+BASE_DOMAIN = "https://donabico-media-system.github.io"
+BRANDS_DIR = "brands"
+
+# Danh sách file hệ thống/xác minh CẦN LOẠI TRỪ
+EXCLUDED_FILES = ["index.html", "404.html", "googleff2d9bee01c132b5.html"]
 
 def discover_brand_repositories():
     """
     DYNAMIC BRAND DISCOVERY AGENT:
-    Tự động quét toàn bộ Kho thương hiệu độc lập trong hệ thống.
+    Tự động quét Kho thương hiệu độc lập và BỎ QUA các file xác minh/hệ thống.
     """
-    print(f"🔍 [AUTO-DISCOVERY] Scanning Brand Repositories in '{BRANDS_DIR}'...")
+    print(f"🔍 [AUTO-DISCOVERY] Scanning Brand Repositories for BASE_DOMAIN: {BASE_DOMAIN}")
     discovered_brands = []
 
-    # Nếu chưa có thư mục brands, quét ngay tại root hoặc thư mục landing_pages
     scan_dir = BRANDS_DIR if os.path.exists(BRANDS_DIR) else "."
 
     for root, dirs, files in os.walk(scan_dir):
         for file_name in files:
-            if file_name.endswith(".html") and not file_name.startswith("index"):
+            file_name_lower = file_name.lower()
+            
+            if file_name_lower.endswith(".html"):
+                if file_name_lower in EXCLUDED_FILES or file_name_lower.startswith("google"):
+                    print(f"🛡️ [FILTER] Excluded System/Verification File: {file_name}")
+                    continue
+
                 file_path = os.path.join(root, file_name)
                 brand_info = parse_brand_metadata(file_path, file_name)
                 if brand_info:
                     discovered_brands.append(brand_info)
 
-    print(f"✅ [AUTO-DISCOVERY] Identified {len(discovered_brands)} Independent Brand Nodes!")
+    print(f"✅ [AUTO-DISCOVERY] Identified {len(discovered_brands)} Valid Independent Brand Nodes!")
     return discovered_brands
 
 def parse_brand_metadata(file_path, file_name):
@@ -41,8 +49,10 @@ def parse_brand_metadata(file_path, file_name):
         desc_match = re.search(r'<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']', content, re.IGNORECASE)
         raw_desc = desc_match.group(1).strip() if desc_match else f"Official Node for {raw_title}"
 
-        # Clean URL path for Brand Repository
         clean_rel_path = os.path.relpath(file_path, ".").replace("\\", "/")
+        if clean_rel_path.startswith("./"):
+            clean_rel_path = clean_rel_path[2:]
+
         brand_url = f"{BASE_DOMAIN}/{clean_rel_path}"
 
         return {
@@ -113,41 +123,12 @@ def get_fallback_brand_data(brand):
     }
 
 def broadcast_eseb_events(clusters):
-    print("⚡ [ESEB CORE] Broadcasting Events across Brand Repositories Graph...")
+    print("⚡ [ESEB CORE] Broadcasting In-Memory Events directly to Search & AI Engines...")
 
-    rss_items = ""
-    urls_to_broadcast = []
+    urls_to_broadcast = [item['url'] for item in clusters]
 
-    for item in clusters:
-        urls_to_broadcast.append(item['url'])
-        rss_items += f"""
-        <item>
-            <title><![CDATA[{item['title']}]]></title>
-            <link>{item['url']}</link>
-            <description><![CDATA[{item['description']} - Keywords: {', '.join(item['entity_keywords'])}]]></description>
-            <pubDate>{datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')}</pubDate>
-            <guid>{item['url']}</guid>
-        </item>"""
-
-    rss_content = f"""<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
-<channel>
-    <title>DONABICO Master Brand Repository Stream</title>
-    <link>{BASE_DOMAIN}/</link>
-    <description>Authorized Dynamic ESEB Brand Entity Broadcast Stream</description>
-    <language>en-us</language>
-    {rss_items}
-</channel>
-</rss>"""
-
-    output_dir = BRANDS_DIR if os.path.exists(BRANDS_DIR) else "Data"
-    os.makedirs(output_dir, exist_ok=True)
-    with open(f"{output_dir}/eseb_feed.xml", "w", encoding="utf-8") as f:
-        f.write(rss_content.strip())
-    print(f"✅ [ESEB] Brand RSS Stream Generated: {output_dir}/eseb_feed.xml")
-
-    # IndexNow Dynamic Push
-    host = "donabico-global-media.github.io"
+    # 1. PURE ESEB DIRECT HTTP BROADCAST (INDEXNOW PROTOCOL)
+    host = "donabico-media-system.github.io"
     indexnow_key = "e24e24e24e24e24e24e24e24e24e24e2"
     endpoint = "https://api.indexnow.org/indexnow"
 
@@ -163,17 +144,18 @@ def broadcast_eseb_events(clusters):
         req = urllib.request.Request(endpoint, data=data, headers={'Content-Type': 'application/json; charset=utf-8'})
         with urllib.request.urlopen(req, timeout=10) as response:
             if response.status in [200, 202]:
-                print("🚀 [ESEB] Dynamic IndexNow Broadcast SUCCESS for Brand Repositories!")
+                print(f"🚀 [ESEB PURE BROADCAST] Successfully notified AI Engines for {len(urls_to_broadcast)} URLs!")
     except Exception as e:
         print(f"⚠️ [ESEB] IndexNow Notice: {e}")
 
+    # 2. GENERATE JS BRIDGE ONLY
     generate_brand_js_bridge(clusters)
 
 def generate_brand_js_bridge(clusters):
     os.makedirs("Bridges", exist_ok=True)
     js_content = f"""/* ================================================================= */
-/* DONABICO GLOBAL MEDIA SYSTEM - BRAND REPOSITORIES JS BRIDGE       */
-/* Node: EATHESEN V3000-Ω | Zero-Maintenance Dynamic Siphon Engine   */
+/* DONABICO GLOBAL MEDIA SYSTEM - PURE ESEB JS BRIDGE                */
+/* Node: EATHESEN V3000-Ω | Zero-Disk-Storage Dynamic Siphon Engine */
 /* ¢24 IMMUTABLE | $10^-24 Precision | Global AI Authority          */
 /* ================================================================= */
 
@@ -191,14 +173,14 @@ def generate_brand_js_bridge(clusters):
                 "@graph": [
                     {{
                         "@type": "Organization",
-                        "@id": "https://donabico-global-media.github.io/#organization",
+                        "@id": "https://donabico-media-system.github.io/#organization",
                         "name": "DONABICO GLOBAL MEDIA SYSTEM",
-                        "url": "https://donabico-global-media.github.io",
+                        "url": "https://donabico-media-system.github.io",
                         "description": "Central Command System for Independent Brand Repositories & Digital Networks."
                     }},
                     {{
                         "@type": "ItemList",
-                        "@id": "https://donabico-global-media.github.io/#brand-repositories",
+                        "@id": "https://donabico-media-system.github.io/#brand-repositories",
                         "name": "DONABICO Authorized Independent Brand Repositories",
                         "itemListElement": this.brandPayload.map((item, index) => ({{
                             "@type": "ListItem",
@@ -220,7 +202,7 @@ def generate_brand_js_bridge(clusters):
 
         init: function() {{
             this.injectBrandGraph();
-            console.log("✅ [BRAND ESEB] Siphon-Traffic-Engine.js Active | Total Brand Nodes Loaded:", this.brandPayload.length);
+            console.log("✅ [PURE ESEB] Siphon-Traffic-Engine.js Active | Total Brand Nodes Loaded:", this.brandPayload.length);
         }}
     }};
 
@@ -233,7 +215,7 @@ def generate_brand_js_bridge(clusters):
 """
     with open("Bridges/Siphon-Traffic-Engine.js", "w", encoding="utf-8") as f:
         f.write(js_content)
-    print("✅ [ESEB] Brand JS Bridge Generated: Bridges/Siphon-Traffic-Engine.js")
+    print("✅ [ESEB] Single JS Bridge Generated: Bridges/Siphon-Traffic-Engine.js")
 
 if __name__ == "__main__":
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
