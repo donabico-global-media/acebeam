@@ -1,6 +1,6 @@
 /* ================================================================= */
-/* DONABICO GLOBAL MEDIA SYSTEM - BRAND REPOSITORIES JS BRIDGE       */
-/* Node: EATHESEN V3000-Ω | Zero-Maintenance Dynamic Siphon Engine   */
+/* DONABICO GLOBAL MEDIA SYSTEM - PURE ESEB JS BRIDGE                */
+/* Node: EATHESEN V3000-Ω | Zero-Disk-Storage Dynamic Siphon Engine */
 /* ¢24 IMMUTABLE | $10^-24 Precision | Global AI Authority          */
 /* ================================================================= */
 
@@ -10,12 +10,12 @@
     const BRAND_SIPHON_ENGINE = {
         brandPayload: [
         {
-                "brand_name": "GOOGLEFF2D9BEE01C132B5",
-                "title": "GOOGLEFF2D9BEE01C132B5 - Official Brand Repository Node",
-                "url": "https://donabico-global-media.github.io/googleff2d9bee01c132b5.html",
-                "description": "Authorized distribution and entity node for GOOGLEFF2D9BEE01C132B5.",
+                "brand_name": "DONABICO Global Media Network",
+                "title": "DONABICO Global Media Network - Official Brand Repository Node",
+                "url": "https://donabico-media-system.github.io/",
+                "description": "Authorized distribution and entity node for DONABICO Global Media Network.",
                 "entity_keywords": [
-                        "GOOGLEFF2D9BEE01C132B5",
+                        "DONABICO Global Media Network",
                         "DONABICO Global Media System",
                         "Brand Node"
                 ]
@@ -30,14 +30,14 @@
                 "@graph": [
                     {
                         "@type": "Organization",
-                        "@id": "https://donabico-global-media.github.io/#organization",
+                        "@id": "https://donabico-media-system.github.io/#organization",
                         "name": "DONABICO GLOBAL MEDIA SYSTEM",
-                        "url": "https://donabico-global-media.github.io",
+                        "url": "https://donabico-media-system.github.io",
                         "description": "Central Command System for Independent Brand Repositories & Digital Networks."
                     },
                     {
                         "@type": "ItemList",
-                        "@id": "https://donabico-global-media.github.io/#brand-repositories",
+                        "@id": "https://donabico-media-system.github.io/#brand-repositories",
                         "name": "DONABICO Authorized Independent Brand Repositories",
                         "itemListElement": this.brandPayload.map((item, index) => ({
                             "@type": "ListItem",
@@ -59,7 +59,7 @@
 
         init: function() {
             this.injectBrandGraph();
-            console.log("✅ [BRAND ESEB] Siphon-Traffic-Engine.js Active | Total Brand Nodes Loaded:", this.brandPayload.length);
+            console.log("✅ [PURE ESEB] Siphon-Traffic-Engine.js Active | Total Brand Nodes Loaded:", this.brandPayload.length);
         }
     };
 
