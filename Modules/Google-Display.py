@@ -12,11 +12,12 @@ import datetime
 
 class EsebDisplayCompiler:
     def __init__(self):
+        # Tự động nhận diện Tên miền Chính & Thông tin Thực thể
         self.primary_domain = os.getenv("PRIMARY_DOMAIN", "donabico.com").strip()
         self.brand_organization = "DONABICO GLOBAL MEDIA SYSTEM"
         self.system_identity = "DONABICO SEARCH & DISPLAY MATRIX"
         
-        # Auto-Discovery: Tự động trích xuất Tên Repository từ môi trường GitHub
+        # Auto-Discovery: Trích xuất tên Repo để tự động định danh cho hàng ngàn Kho Affiliate
         raw_repo = os.getenv("GITHUB_REPOSITORY", "donabico-global-media/affiliate-hub")
         repo_slug = raw_repo.split("/")[-1].lower()
         
@@ -24,14 +25,14 @@ class EsebDisplayCompiler:
         self.brand_clean_name = " ".join([word.capitalize() for word in repo_slug.replace("-", " ").replace("_", " ").split()])
         self.repo_key = repo_slug.replace("-", "").replace("_", "")
         
-        # Build Timestamp làm dấu ấn thời gian thực
+        # Build Timestamp dạng UTC thực
         self.build_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
         self.brand_config = self._resolve_configuration()
 
     def _resolve_configuration(self):
         custom_affiliate_env = os.getenv("AFFILIATE_TARGET_URL", "").strip()
         
-        # Cấu hình Linh hoạt & Tự động nhận diện cho hàng ngàn Kho Thương Hiệu
+        # Cấu hình Linh hoạt & Tự động nhận diện (Zero Hardcoded Brands)
         selected = {
             "name": f"{self.brand_clean_name} Certified Display Hub",
             "affiliate": custom_affiliate_env if custom_affiliate_env else f"https://{self.primary_domain}/shop/{self.repo_key}",
