@@ -16,7 +16,8 @@ class EsebDisplayCompiler:
         self.brand_organization = "DONABICO GLOBAL MEDIA SYSTEM"
         self.system_identity = "DONABICO SEARCH & DISPLAY MATRIX"
         
-        raw_repo = os.getenv("GITHUB_REPOSITORY", "donabico-global-media/affiliate-hub")
+        # Auto-Discovery từ môi trường GitHub Actions
+        raw_repo = os.getenv("GITHUB_REPOSITORY", "donabico-global-media/acebeam")
         repo_slug = raw_repo.split("/")[-1].lower()
         
         self.brand_clean_name = " ".join([word.capitalize() for word in repo_slug.replace("-", " ").replace("_", " ").split()])
@@ -26,9 +27,21 @@ class EsebDisplayCompiler:
 
     def _resolve_configuration(self):
         custom_affiliate_env = os.getenv("AFFILIATE_TARGET_URL", "").strip()
+        
+        # Bảng ánh xạ Link Affiliate trực tiếp cho từng Thương hiệu (Mở rộng cho 1.000+ Kho)
+        brand_affiliate_map = {
+            "acebeam": "https://acebeamflashlight.sjv.io/donabio_global_media",
+            "8000kicks": "https://8000kicks.com/?ref=donabico"
+        }
+        
+        # Ưu tiên: 1. Biến môi trường Secret/Var -> 2. Link trực tiếp trong Map -> 3. Link fallback
+        affiliate_target = custom_affiliate_env or brand_affiliate_map.get(
+            self.repo_key, f"https://{self.primary_domain}/shop/{self.repo_key}"
+        )
+
         selected = {
             "name": f"{self.brand_clean_name} Certified Display Hub",
-            "affiliate": custom_affiliate_env if custom_affiliate_env else f"https://{self.primary_domain}/shop/{self.repo_key}",
+            "affiliate": affiliate_target,
             "canonical": f"https://{self.repo_key}.{self.primary_domain}"
         }
         return selected
@@ -44,7 +57,7 @@ class EsebDisplayCompiler:
             canonical_url = self.brand_config["canonical"]
             current_year = datetime.datetime.now().year
 
-            # Template JS an toàn tuyệt đối, triệt tiêu lỗi F-string SyntaxError
+            # Template JS an toàn, tránh đụng độ cú pháp F-string với JS
             template = """/**
  * __ORG_NAME__
  * __SYS_IDENTITY__
@@ -166,7 +179,7 @@ class EsebDisplayCompiler:
 })();
 """
 
-            # Gán giá trị biến an toàn
+            # Điền các biến động an toàn
             js_content = template \
                 .replace("__ORG_NAME__", self.brand_organization) \
                 .replace("__SYS_IDENTITY__", self.system_identity) \
