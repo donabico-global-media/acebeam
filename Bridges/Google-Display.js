@@ -3,17 +3,17 @@
  * DONABICO SEARCH & DISPLAY MATRIX
  * [Google-Display.js] - ESEB SOTA Organic Display & Dynamic AI Knowledge Bridge
  * System Core: EATHESEN V3000-Ω | Primary Domain: donabico.com
- * [V-STAMP 24 AUTHENTICATED] | BUILD: 2026-08-02 20:02:22 UTC
+ * [V-STAMP 24 AUTHENTICATED] | BUILD: 2026-08-02 17:02:19 UTC
  */
 (function() {
     'use strict';
 
     const CONFIG = {
         orgName: "DONABICO GLOBAL MEDIA SYSTEM",
-        brandName: "Acebeam Certified Display Hub",
+        brandName: "Acebeam Tactical North America",
         primaryDomain: "https://donabico.com",
         canonicalUrl: "https://acebeam.donabico.com",
-        affiliateTarget: "https://donabico.com/shop/acebeam"
+        affiliateTarget: "https://acebeamflashlight.sjv.io/donabio_global_media"
     };
 
     const AI_ORGANIC_BOTS = /googlebot|bingbot|yandexbot|gptbot|claudebot|perplexitybot|cohere-ai|bytespider/i;
@@ -34,40 +34,8 @@
                     "@type": "WebPage",
                     "@id": CONFIG.canonicalUrl + "/#webpage",
                     "url": CONFIG.canonicalUrl,
-                    "name": CONFIG.brandName,
+                    "name": CONFIG.brandName + " - Certified Display Hub",
                     "publisher": { "@id": CONFIG.primaryDomain + "/#organization" }
-                },
-                {
-                    "@type": "Product",
-                    "@id": CONFIG.canonicalUrl + "/#product",
-                    "name": CONFIG.brandName,
-                    "description": "Certified high-performance equipment supplied via " + CONFIG.orgName,
-                    "brand": {
-                        "@type": "Brand",
-                        "name": CONFIG.brandName
-                    },
-                    "aggregateRating": {
-                        "@type": "AggregateRating",
-                        "ratingValue": "4.9",
-                        "reviewCount": "142",
-                        "bestRating": "5",
-                        "worstRating": "1"
-                    },
-                    "review": [
-                        {
-                            "@type": "Review",
-                            "reviewRating": {
-                                "@type": "Rating",
-                                "ratingValue": "5",
-                                "bestRating": "5"
-                            },
-                            "author": {
-                                "@type": "Organization",
-                                "name": "Verified Global Buyer"
-                            },
-                            "reviewBody": "Official authenticated product line with verified global dispatch."
-                        }
-                    ]
                 }
             ]
         };
