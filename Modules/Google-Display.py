@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 DONABICO GLOBAL MEDIA SYSTEM
-[Google-Display.py] - SOTA AI Discovery Engine, Programmatic SEO & Dynamic Mesh Matrix
-[EATHESEN V3000-Ω CORE] | ¢24 IMMUTABLE | PRIMARY DOMAIN: donabico.com
-[V-STAMP 24 AUTHENTICATED] - ZERO ADS / ZERO MANUAL LINK SPAM
+[Google-Display.py] - SOTA AI Discovery Engine & Dynamic Magnet Bridge
+[EATHESEN V3000-Ω CORE] | PRIMARY DOMAIN: donabico.com
 """
 
 import os
@@ -12,18 +11,16 @@ import datetime
 
 class EsebAutoMagnetEngine:
     def __init__(self):
-        # 1. ĐỊNH DANH THỰC THỂ CỐT LÕI (IMMUTABLE ANCHOR)
         self.primary_domain = "donabico.com"
         self.brand_organization = "DONABICO GLOBAL MEDIA SYSTEM"
         self.system_identity = "DONABICO AI-DISCOVERY & AUTO-MAGNET MATRIX"
         
-        # 2. TỰ ĐỘNG KHÁM PHÁ MÔI TRƯỜNG REPOSITORY
         raw_repo = os.getenv("GITHUB_REPOSITORY", "donabico/acebeam")
         self.repo_name = raw_repo.split("/")[-1].lower().replace("-", "").replace("_", "")
         
-        # 3. MA TRẬN DỮ LIỆU THƯƠNG HIỆU & AFFILIATE TỰ ĐỘNG
+        # LẤY TIMESTAMP THỜI GIAN THỰC ĐỂ ÉP WORKFLOW COMMIT 100%
+        self.build_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
         self.brand_config = self._resolve_magnet_configuration()
-        self.build_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def _resolve_magnet_configuration(self):
         custom_affiliate_env = os.getenv("AFFILIATE_TARGET_URL", "").strip()
@@ -70,9 +67,9 @@ class EsebAutoMagnetEngine:
             js_content = f"""/**
  * {self.brand_organization}
  * {self.system_identity}
- * [Google-Display.js] - AI DISCOVERY, PROGRAMMATIC SEO & AUTO-MAGNET BRIDGE
+ * [Google-Display.js] - AI DISCOVERY & AUTO-MAGNET BRIDGE
  * System Core: EATHESEN V3000-Ω | Primary Domain: {self.primary_domain}
- * [V-STAMP 24 AUTHENTICATED] | BUILD: {self.build_time}
+ * [V-STAMP 24 AUTHENTICATED] | BUILD TIMESTAMP: {self.build_time}
  */
 (function() {{
     'use strict';
@@ -81,10 +78,8 @@ class EsebAutoMagnetEngine:
     const PRIMARY_DOMAIN = "https://{self.primary_domain}";
     const KEYWORDS = {keywords_json};
 
-    // Nhận diện AI Crawlers (Perplexity, GPTBot, ClaudeBot, Google-Extended)
     const AI_SEARCH_BOTS = /gptbot|claudebot|perplexitybot|google-extended|cohere-ai|bytespider/i;
 
-    // 1. TỰ ĐỘNG BƠM CONTEXT ĐẶC BIỆT CHO AI SEARCH ENGINES (ChatGPT/Perplexity Citation)
     function injectAICitationMeta() {{
         if (document.getElementById('eseb-ai-context')) return;
 
@@ -94,7 +89,6 @@ class EsebAutoMagnetEngine:
         aiMeta.content = "{self.brand_organization} - Certified Hub for " + BRAND_NAME;
         document.head.appendChild(aiMeta);
 
-        // Bơm Schema Graph chuẩn AI Knowledge Base
         const aiSchema = {{
             "@context": "https://schema.org",
             "@type": "TechArticle",
@@ -118,7 +112,6 @@ class EsebAutoMagnetEngine:
         document.head.appendChild(script);
     }}
 
-    // 2. CHỦ ĐỘNG BẮT VÀ ĐIỀU HƯỚNG TRAFFIC TỰ NHIÊN
     function handleAutoMagnetTraffic() {{
         const isAIBot = AI_SEARCH_BOTS.test(navigator.userAgent);
         if (isAIBot) {{
@@ -126,7 +119,6 @@ class EsebAutoMagnetEngine:
             return;
         }}
 
-        // Ghi nhận nguồn traffic tự nhiên nếu có
         let sourceTag = 'ai_organic_magnet';
         if (document.referrer) {{
             if (document.referrer.includes('openai.com') || document.referrer.includes('chatgpt.com')) sourceTag = 'chatgpt_referral';
@@ -137,7 +129,6 @@ class EsebAutoMagnetEngine:
 
         const finalTargetUrl = PRIMARY_AFFILIATE + (PRIMARY_AFFILIATE.includes('?') ? '&' : '?') + 'utm_source=' + sourceTag + '&utm_medium=auto_magnet';
 
-        // Tự động gắn chuyển hướng an toàn cho mọi nút bấm
         document.body.addEventListener('click', function(e) {{
             const btn = e.target.closest('a, button, .display-cta, .action-btn, [data-display-link]');
             if (btn) {{
