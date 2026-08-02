@@ -43,18 +43,18 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Đồng bộ lịch sử commit với remote
-          git fetch origin ${{ github.ref_name }}
-          git reset --soft origin/${{ github.ref_name }}
+          mkdir -p Bridges
           
           if [ -f "Bridges/Google-Search.js" ]; then
             git add Bridges/Google-Search.js
             
             if git diff --staged --quiet; then
-              echo "[ESEB] Dữ liệu Google-Search.js trùng khớp, không có thay đổi mới."
+              echo "⚠️ [ESEB] Dữ liệu Google-Search.js không đổi. Bỏ qua Commit."
             else
-              git commit -m "seo(eseb): refresh organic search bridge [skip ci]"
-              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+              git commit -m "seo(eseb): auto-compile organic search bridge & merchant schema [skip ci]"
+              git pull --rebase origin ${{ github.ref_name }}
+              git push origin ${{ github.ref_name }}
+              echo "✅ [ESEB] Google-Search.js đã được Commit & Push thành công!"
             fi
           else
             echo "::error::Tệp Bridges/Google-Search.js không tồn tại!"
