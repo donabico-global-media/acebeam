@@ -1,31 +1,112 @@
 /**
  * DONABICO GLOBAL MEDIA SYSTEM
- * DONABICO-MEDIA-SYSTEM SEARCH MATRIX
- * [Google-Search.js] - ESEB Search Optimization & Organic Rank Bridge
+ * DONABICO SEARCH MATRIX
+ * [Google-Search.js] - ESEB SOTA Organic Search & Merchant Schema Bridge
+ * System Core: EATHESEN V3000-Ω | Primary Domain: donabico.com
  * Generated Automatically via GOOGLE SEARCH PROTOCOL
  * [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
  */
 (function() {
     'use strict';
-    const BRAND_NAME = "DONABICO GLOBAL MEDIA SYSTEM";
-    const SYSTEM_IDENTITY = "DONABICO-MEDIA-SYSTEM SEARCH MATRIX";
-    const AFFILIATE_TARGET = "https://acebeamflashlight.sjv.io/donabio_global_media";
-    const SEARCH_BOTS = /googlebot|bingbot|yandexbot|baiduspider|duckduckbot/i;
 
-    function injectSearchMeta() {
-        // TỰ ĐỘNG BƠM CẤU TRÚC DỮ LIỆU ĐA TẦNG CHO BỘ LỌC SEARCH (SCHEMA STRUCTURED DATA CHUẨN ESEB)
-        const searchSchema = {
+    const CONFIG = {
+        orgName: "DONABICO GLOBAL MEDIA SYSTEM",
+        brandName: "Acebeam Tactical North America",
+        primaryDomain: "https://donabico.com",
+        subDomain: "https://acebeam.donabico.com",
+        affiliateTarget: "https://acebeamflashlight.sjv.io/donabio_global_media",
+        price: "99.95",
+        currency: "USD"
+    };
+
+    // SOTA Bot Detection Matrix (Crawler & AI Search Engine Bots)
+    const SEARCH_BOTS = /googlebot|bingbot|yandexbot|baiduspider|duckduckbot|gptbot|claudebot|perplexitybot/i;
+
+    function injectDynamicSchemaGraph() {
+        if (document.getElementById('eseb-sota-schema-graph')) return;
+
+        const currentOrigin = window.location.origin;
+
+        const schemaGraph = {
             "@context": "https://schema.org",
             "@graph": [
                 {
+                    "@type": "Organization",
+                    "@id": CONFIG.primaryDomain + "/#organization",
+                    "name": CONFIG.orgName,
+                    "url": CONFIG.primaryDomain,
+                    "logo": CONFIG.primaryDomain + "/assets/logo.png",
+                    "sameAs": [
+                        "https://x.com/donabico",
+                        "https://facebook.com/donabico"
+                    ]
+                },
+                {
                     "@type": "WebSite",
-                    "@id": window.location.origin + "/#website",
-                    "url": window.location.origin,
-                    "name": BRAND_NAME,
+                    "@id": currentOrigin + "/#website",
+                    "url": currentOrigin,
+                    "name": CONFIG.brandName,
+                    "publisher": { "@id": CONFIG.primaryDomain + "/#organization" },
                     "potentialAction": {
                         "@type": "SearchAction",
-                        "target": window.location.origin + "/?s={search_term_string}",
+                        "target": currentOrigin + "/?s={search_term_string}",
                         "query-input": "required name=search_term_string"
+                    }
+                },
+                {
+                    "@type": "Product",
+                    "@id": currentOrigin + "/#primary-product",
+                    "name": CONFIG.brandName,
+                    "image": CONFIG.primaryDomain + "/assets/product-hero.png",
+                    "description": CONFIG.brandName + " - Official Authorized Node under DONABICO GLOBAL MEDIA SYSTEM.",
+                    "brand": {
+                        "@type": "Brand",
+                        "name": CONFIG.brandName
+                    },
+                    "offers": {
+                        "@type": "Offer",
+                        "url": CONFIG.affiliateTarget,
+                        "priceCurrency": CONFIG.currency,
+                        "price": CONFIG.price,
+                        "priceValidUntil": "2028-12-31",
+                        "itemCondition": "https://schema.org/NewCondition",
+                        "availability": "https://schema.org/InStock",
+                        "seller": { "@id": CONFIG.primaryDomain + "/#organization" },
+                        "shippingDetails": {
+                            "@type": "OfferShippingDetails",
+                            "shippingRate": {
+                                "@type": "MonetaryAmount",
+                                "value": "0.00",
+                                "currency": CONFIG.currency
+                            },
+                            "shippingDestination": [
+                                { "@type": "DefinedRegion", "addressCountry": "US" },
+                                { "@type": "DefinedRegion", "addressCountry": "CA" }
+                            ],
+                            "deliveryTime": {
+                                "@type": "ShippingDeliveryTime",
+                                "handlingTime": {
+                                    "@type": "QuantitativeValue",
+                                    "minValue": 1,
+                                    "maxValue": 2,
+                                    "unitCode": "DAY"
+                                },
+                                "transitTime": {
+                                    "@type": "QuantitativeValue",
+                                    "minValue": 3,
+                                    "maxValue": 5,
+                                    "unitCode": "DAY"
+                                }
+                            }
+                        },
+                        "hasMerchantReturnPolicy": {
+                            "@type": "MerchantReturnPolicy",
+                            "applicableCountry": ["US", "CA"],
+                            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                            "merchantReturnDays": 30,
+                            "returnMethod": "https://schema.org/ReturnByMail",
+                            "returnFees": "https://schema.org/FreeReturn"
+                        }
                     }
                 },
                 {
@@ -33,10 +114,10 @@
                     "mainEntity": [
                         {
                             "@type": "Question",
-                            "name": "Hệ thống phân phối kỹ thuật số DONABICO hoạt động như thế nào?",
+                            "name": "How does DONABICO verify " + CONFIG.brandName + " products?",
                             "acceptedAnswer": {
                                 "@type": "Answer",
-                                "text": "Hệ thống vận hành trên nền tảng đám mây toàn cầu, cung cấp thông tin kỹ thuật số chính xác và tối ưu hóa trải nghiệm tìm kiếm của người dùng."
+                                "text": "DONABICO GLOBAL MEDIA SYSTEM operates an authenticated digital node ensuring direct manufacturer redirection and global warranty routing."
                             }
                         }
                     ]
@@ -44,35 +125,37 @@
             ]
         };
 
-        const script = document.createElement("script");
-        script.type = "application/ld+json";
-        script.text = JSON.stringify(searchSchema);
-        document.head.appendChild(script);
+        const scriptTag = document.createElement("script");
+        scriptTag.id = "eseb-sota-schema-graph";
+        scriptTag.type = "application/ld+json";
+        scriptTag.text = JSON.stringify(schemaGraph);
+        document.head.appendChild(scriptTag);
     }
 
-    function executeSearchProtocol() {
-        injectSearchMeta();
-        
-        const isSearchBot = SEARCH_BOTS.test(navigator.userAgent);
-        const ctaButtons = document.querySelectorAll('a, .action-link');
+    function executeInceptionProtocol() {
+        injectDynamicSchemaGraph();
 
-        if (isSearchBot) {
-            // Báo hiệu hệ thống Search SOTA đã ghi nhận Bot tìm kiếm thành công
-            document.documentElement.setAttribute('data-sota-search', 'active');
+        const isBot = SEARCH_BOTS.test(navigator.userAgent);
+        
+        if (isBot) {
+            document.documentElement.setAttribute('data-eseb-sota-bot', 'verified');
         } else {
-            // Đối với người dùng Organic, chặn lỗi nhảy trang và dẫn thẳng về cổng tiền tệ
-            ctaButtons.forEach(btn => {
-                const href = btn.getAttribute('href');
-                if (href === '#' || href === '' || href === null) {
-                    btn.setAttribute('href', AFFILIATE_TARGET);
+            // Phễu Siphon Organic Users về Link Affiliate Đích
+            const ctaElements = document.querySelectorAll('a, button, .action-btn, .cta-link');
+            ctaElements.forEach(element => {
+                const href = element.getAttribute('href');
+                if (!href || href === '#' || href === '' || href.startsWith('javascript:')) {
+                    element.setAttribute('href', CONFIG.affiliateTarget);
+                    element.setAttribute('target', '_blank');
+                    element.setAttribute('rel', 'noopener sponsored');
                 }
             });
         }
     }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', executeSearchProtocol);
+        document.addEventListener('DOMContentLoaded', executeInceptionProtocol);
     } else {
-        executeSearchProtocol();
+        executeInceptionProtocol();
     }
 })();
