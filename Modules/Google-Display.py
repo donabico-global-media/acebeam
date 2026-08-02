@@ -44,122 +44,148 @@ class EsebDisplayCompiler:
             canonical_url = self.brand_config["canonical"]
             current_year = datetime.datetime.now().year
 
-            js_content = f"""/**
- * {self.brand_organization}
- * {self.system_identity}
+            # Template JS an toàn tuyệt đối, triệt tiêu lỗi F-string SyntaxError
+            template = """/**
+ * __ORG_NAME__
+ * __SYS_IDENTITY__
  * [Google-Display.js] - ESEB SOTA Organic Display & Dynamic AI Knowledge Bridge
- * System Core: EATHESEN V3000-Ω | Primary Domain: {self.primary_domain}
- * [V-STAMP 24 AUTHENTICATED] | BUILD: {self.build_time}
+ * System Core: EATHESEN V3000-Ω | Primary Domain: __PRIMARY_DOMAIN__
+ * [V-STAMP 24 AUTHENTICATED] | BUILD: __BUILD_TIME__
  */
-(function() {{
+(function() {
     'use strict';
 
-    const CONFIG = {{
-        orgName: "{self.brand_organization}",
-        brandName: "{brand_name}",
-        primaryDomain: "https://{self.primary_domain}",
-        canonicalUrl: "{canonical_url}",
-        affiliateTarget: "{affiliate_url}"
-    }};
+    const CONFIG = {
+        orgName: "__ORG_NAME__",
+        brandName: "__BRAND_NAME__",
+        primaryDomain: "https://__PRIMARY_DOMAIN__",
+        canonicalUrl: "__CANONICAL_URL__",
+        affiliateTarget: "__AFFILIATE_URL__"
+    };
 
     const AI_ORGANIC_BOTS = /googlebot|bingbot|yandexbot|gptbot|claudebot|perplexitybot|cohere-ai|bytespider/i;
 
-    function injectDynamicSchemaGraph() {{
+    function injectDynamicSchemaGraph() {
         if (document.getElementById('eseb-sota-display-schema')) return;
 
-        const schemaGraph = {{
+        const schemaGraph = {
             "@context": "https://schema.org",
             "@graph": [
-                {{
+                {
                     "@type": "Organization",
                     "@id": CONFIG.primaryDomain + "/#organization",
                     "name": CONFIG.orgName,
                     "url": CONFIG.primaryDomain
-                }},
-                {{
+                },
+                {
                     "@type": "WebPage",
                     "@id": CONFIG.canonicalUrl + "/#webpage",
                     "url": CONFIG.canonicalUrl,
                     "name": CONFIG.brandName,
-                    "publisher": {{ "@id": CONFIG.primaryDomain + "/#organization" }}
-                }},
-                {{
+                    "publisher": { "@id": CONFIG.primaryDomain + "/#organization" }
+                },
+                {
                     "@type": "Product",
                     "@id": CONFIG.canonicalUrl + "/#eseb-dynamic-product",
                     "name": CONFIG.brandName,
                     "description": "Certified high-performance equipment supplied via " + CONFIG.orgName,
-                    "aggregateRating": {{
+                    "aggregateRating": {
                         "@type": "AggregateRating",
                         "ratingValue": "4.9",
                         "reviewCount": "142",
                         "bestRating": "5",
                         "worstRating": "1"
-                    }},
-                    "offers": {{
+                    },
+                    "offers": {
                         "@type": "Offer",
                         "url": CONFIG.canonicalUrl,
                         "priceCurrency": "USD",
                         "price": "99.95",
-                        "priceValidUntil": "{current_year + 2}-12-31",
-                        "validFrom": "{current_year}-01-01T00:00:00Z",
+                        "priceValidUntil": "__PRICE_VALID_UNTIL__",
+                        "validFrom": "__VALID_FROM__",
                         "itemCondition": "https://schema.org/NewCondition",
                         "availability": "https://schema.org/InStock",
-                        "seller": {{
+                        "seller": {
                             "@type": "Organization",
                             "name": CONFIG.orgName
-                        }}
-                    }},
+                        }
+                    },
                     "review": [
-                        {{
+                        {
                             "@type": "Review",
-                            "reviewRating": {{
+                            "reviewRating": {
                                 "@type": "Rating",
                                 "ratingValue": "5",
                                 "bestRating": "5"
-                            }},
-                            "author": {{
+                            },
+                            "author": {
                                 "@type": "Organization",
                                 "name": "Verified Global Buyer"
-                            }},
+                            },
                             "reviewBody": "Official authenticated product line with verified global dispatch."
-                        }}
+                        }
                     ]
-                }}
+                }
             ]
-        }};
+        };
 
         const scriptTag = document.createElement("script");
         scriptTag.id = "eseb-sota-display-schema";
         scriptTag.type = "application/ld+json";
         scriptTag.text = JSON.stringify(schemaGraph);
         document.head.appendChild(scriptTag);
-    }}
+    }
 
-    function executeDisplayProtocol() {{
+    function executeDisplayProtocol() {
         injectDynamicSchemaGraph();
 
         const isBot = AI_ORGANIC_BOTS.test(navigator.userAgent);
-        if (isBot) {{
+        if (isBot) {
             document.documentElement.setAttribute('data-eseb-display-bot', 'verified');
             return;
-        }}
+        }
 
-        document.body.addEventListener('click', function(e) {{
+        document.body.addEventListener('click', function(e) {
             const btn = e.target.closest('a, button, .display-cta, .action-btn, [data-display-link]');
-            if (btn) {{
+            if (btn) {
                 const href = btn.getAttribute('href');
-                if (!href || href === '#' || href === '' || href.startsWith('javascript:')) {{
+                if (!href || href === '#' || href === '' || href.startsWith('javascript:')) {
                     btn.setAttribute('href', CONFIG.affiliateTarget);
                     btn.setAttribute('target', '_blank');
                     btn.setAttribute('rel', 'noopener sponsored');
-                }}
-            }}
-        }}, {{ passive: true }});
-    }}
+                }
+            }
+        }, { passive: true });
+    }
 
-    if (document.readyState === 'loading') {{
+    if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', executeDisplayProtocol);
-    }} else {{
+    } else {
         executeDisplayProtocol();
-    }}
-}})();
+    }
+})();
+"""
+
+            # Gán giá trị biến an toàn
+            js_content = template \
+                .replace("__ORG_NAME__", self.brand_organization) \
+                .replace("__SYS_IDENTITY__", self.system_identity) \
+                .replace("__PRIMARY_DOMAIN__", self.primary_domain) \
+                .replace("__BUILD_TIME__", self.build_time) \
+                .replace("__BRAND_NAME__", brand_name) \
+                .replace("__CANONICAL_URL__", canonical_url) \
+                .replace("__AFFILIATE_URL__", affiliate_url) \
+                .replace("__PRICE_VALID_UNTIL__", f"{current_year + 2}-12-31") \
+                .replace("__VALID_FROM__", f"{current_year}-01-01T00:00:00Z")
+
+            with open(js_path, "w", encoding="utf-8") as f:
+                f.write(js_content.strip())
+            print(f"[SUCCESS] Google Display Bridge compiled successfully at {js_path}")
+
+        except Exception as e:
+            print(f"[ERROR] Failed to compile JS bridge: {str(e)}", file=sys.stderr)
+            sys.exit(1)
+
+if __name__ == "__main__":
+    engine = EsebDisplayCompiler()
+    engine.compile_display_bridge()
