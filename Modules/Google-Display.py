@@ -12,27 +12,20 @@ import datetime
 
 class EsebDisplayCompiler:
     def __init__(self):
-        # Tự động nhận diện Tên miền Chính & Thông tin Thực thể
         self.primary_domain = os.getenv("PRIMARY_DOMAIN", "donabico.com").strip()
         self.brand_organization = "DONABICO GLOBAL MEDIA SYSTEM"
         self.system_identity = "DONABICO SEARCH & DISPLAY MATRIX"
         
-        # Auto-Discovery: Trích xuất tên Repo để tự động định danh cho hàng ngàn Kho Affiliate
         raw_repo = os.getenv("GITHUB_REPOSITORY", "donabico-global-media/affiliate-hub")
         repo_slug = raw_repo.split("/")[-1].lower()
         
-        # Chuẩn hóa Tên Thương hiệu Tự động (Ví dụ: "acebeam-tactical" -> "Acebeam Tactical")
         self.brand_clean_name = " ".join([word.capitalize() for word in repo_slug.replace("-", " ").replace("_", " ").split()])
         self.repo_key = repo_slug.replace("-", "").replace("_", "")
-        
-        # Build Timestamp dạng UTC thực
         self.build_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
         self.brand_config = self._resolve_configuration()
 
     def _resolve_configuration(self):
         custom_affiliate_env = os.getenv("AFFILIATE_TARGET_URL", "").strip()
-        
-        # Cấu hình Linh hoạt & Tự động nhận diện (Zero Hardcoded Brands)
         selected = {
             "name": f"{self.brand_clean_name} Certified Display Hub",
             "affiliate": custom_affiliate_env if custom_affiliate_env else f"https://{self.primary_domain}/shop/{self.repo_key}",
@@ -49,6 +42,7 @@ class EsebDisplayCompiler:
             brand_name = self.brand_config["name"]
             affiliate_url = self.brand_config["affiliate"]
             canonical_url = self.brand_config["canonical"]
+            current_year = datetime.datetime.now().year
 
             js_content = f"""/**
  * {self.brand_organization}
@@ -91,19 +85,29 @@ class EsebDisplayCompiler:
                 }},
                 {{
                     "@type": "Product",
-                    "@id": CONFIG.canonicalUrl + "/#product",
+                    "@id": CONFIG.canonicalUrl + "/#eseb-dynamic-product",
                     "name": CONFIG.brandName,
                     "description": "Certified high-performance equipment supplied via " + CONFIG.orgName,
-                    "brand": {{
-                        "@type": "Brand",
-                        "name": CONFIG.brandName
-                    }},
                     "aggregateRating": {{
                         "@type": "AggregateRating",
                         "ratingValue": "4.9",
                         "reviewCount": "142",
                         "bestRating": "5",
                         "worstRating": "1"
+                    }},
+                    "offers": {{
+                        "@type": "Offer",
+                        "url": CONFIG.canonicalUrl,
+                        "priceCurrency": "USD",
+                        "price": "99.95",
+                        "priceValidUntil": "{current_year + 2}-12-31",
+                        "validFrom": "{current_year}-01-01T00:00:00Z",
+                        "itemCondition": "https://schema.org/NewCondition",
+                        "availability": "https://schema.org/InStock",
+                        "seller": {{
+                            "@type": "Organization",
+                            "name": CONFIG.orgName
+                        }}
                     }},
                     "review": [
                         {{
@@ -140,7 +144,6 @@ class EsebDisplayCompiler:
             return;
         }}
 
-        // Phễu Siphon CTA hữu cơ chuẩn ESEB
         document.body.addEventListener('click', function(e) {{
             const btn = e.target.closest('a, button, .display-cta, .action-btn, [data-display-link]');
             if (btn) {{
@@ -160,15 +163,3 @@ class EsebDisplayCompiler:
         executeDisplayProtocol();
     }}
 }})();
-"""
-            with open(js_path, "w", encoding="utf-8") as f:
-                f.write(js_content.strip())
-            print(f"[SUCCESS] Google Display Bridge compiled successfully at {js_path}")
-
-        except Exception as e:
-            print(f"[ERROR] Failed to compile JS bridge: {str(e)}", file=sys.stderr)
-            sys.exit(1)
-
-if __name__ == "__main__":
-    engine = EsebDisplayCompiler()
-    engine.compile_display_bridge()
