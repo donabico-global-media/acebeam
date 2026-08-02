@@ -10,10 +10,6 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: eseb-display-protocol-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   orchestrate-display:
     runs-on: ubuntu-latest
@@ -40,31 +36,20 @@ jobs:
             exit 1
           fi
 
-      - name: 🚀 Commit and Push Display Bridge
+      - name: 🚀 Dedicated Commit and Push Google-Display.js
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 1. Đồng bộ thông tin Remote
-          git fetch origin ${{ github.ref_name }}
-          
-          mkdir -p Bridges
+          # Kéo dữ liệu mới nhất từ remote tránh xung đột rebase
+          git pull origin ${{ github.ref_name }} --rebase || true
           
           if [ -f "Bridges/Google-Display.js" ]; then
-            # 2. Kiểm tra nếu file JS tạo ra trùng khớp 100% với file đang có trên Remote thì bỏ qua
-            if git diff origin/${{ github.ref_name }} -- Bridges/Google-Display.js --quiet; then
-              echo "[ESEB DISPLAY] Bridges/Google-Display.js đã đồng bộ hoàn toàn với remote. Bỏ qua commit."
-            else
-              git add Bridges/Google-Display.js
-              git commit -m "build(eseb-display): deploy isolated google display bridge [skip ci]"
-              
-              # 3. Rebase tự động giải quyết conflict bằng cách giữ lại bản biên dịch mới nhất từ Runner (-X ours)
-              git pull origin ${{ github.ref_name }} --rebase -X ours || true
-              
-              # 4. Push lên Remote
-              git push origin HEAD:${{ github.ref_name }}
-            fi
+            git add -f Bridges/Google-Display.js
+            git commit -m "build(display): force deploy Bridges/Google-Display.js [skip ci]" || echo "No changes to commit"
+            git push origin HEAD:${{ github.ref_name }}
+            echo "✅ [SUCCESS] Đã ép Commit thành công Bridges/Google-Display.js!"
           else
-            echo "::error::Bridges/Google-Display.js does not exist!"
+            echo "::error::Bridges/Google-Display.js không tồn tại sau khi chạy Python!"
             exit 1
           fi
