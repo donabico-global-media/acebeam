@@ -6,14 +6,13 @@ import urllib.error
 
 def call_yocto_ai_engine(api_key):
     """
-    Mode Yocto: Generates ultra-precise Entity Knowledge Graph Telemetry.
-    Uses multi-model fallback strategy (gemini-2.0-flash -> gemini-2.5-flash) to guarantee 200 OK.
+    ESEB Mode Yocto Engine Core: Generates Knowledge Graph Telemetry.
+    Fallback strategy (gemini-2.0-flash -> gemini-2.5-flash) guarantees 200 OK.
     """
     if not api_key:
-        print("⚠️ GEMINI_API_KEY is empty or missing! Using Yocto Fallback Payload.")
+        print("⚠️ GEMINI_API_KEY is missing! Using Yocto Default Payload.")
         return get_fallback_payload()
 
-    # Priority endpoints list to prevent 404
     endpoints = [
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
@@ -56,7 +55,7 @@ def call_yocto_ai_engine(api_key):
             except urllib.error.HTTPError as e:
                 if e.code == 404:
                     print(f"⚠️ Model 404 on {url.split('/')[-1]}, trying next endpoint...")
-                    break  # Break inner loop to try next endpoint immediately
+                    break
                 elif e.code == 429 and attempt < max_retries:
                     wait_time = attempt * 12
                     print(f"⚠️ Rate Limit (429). Retrying in {wait_time}s...")
@@ -85,27 +84,37 @@ def get_fallback_payload():
     }
 
 def generate_yocto_siphon_bridge():
+    """
+    Compiles and exports Bridges/AI-System-Siphon.js strictly formatted for ESEB.
+    """
     output_dir = "Bridges"
     os.makedirs(output_dir, exist_ok=True)
 
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
     
-    print("⚡ Mode Yocto: Executing Global AI Entity Anchoring Engine...")
+    print("⚡ ESEB Engine Core: Compiling AI-System-Siphon JS Bridge...")
     yocto_data = call_yocto_ai_engine(api_key)
 
     js_content = f"""/* ================================================================= */
-/* DONABICO GLOBAL MEDIA SYSTEM - MODE YOCTO GLOBAL AI ENTITY BRIDGE */
-/* Node: EATHESEN V3000-Ω | Module: AI-System-Siphon (Yocto Mode)     */
-/* ¢24 IMMUTABLE | $10^-24 Precision | Global AI Authority          */
+/* DONABICO GLOBAL MEDIA SYSTEM - ESEB PROTOCOL JS BRIDGE            */
+/* Generated Automatically by Modules/AI-System-Siphon.py             */
+/* Node: EATHESEN V3000-Ω | Anchor: ¢24 | Zero-UI Impact            */
 /* ================================================================= */
 
-(function() {{
+(function () {{
     'use strict';
 
     const YOCTO_ENTITY_SIPHON = {{
+        config: {{
+            hostname: window.location.hostname,
+            href: window.location.href,
+            anchor: "¢24",
+            brand: "DONABICO GLOBAL MEDIA SYSTEM"
+        }},
+
         yoctoPayload: {json.dumps(yocto_data, ensure_ascii=False, indent=4)},
 
-        injectYoctoKnowledgeGraph: function() {{
+        injectYoctoKnowledgeGraph: function () {{
             if (document.getElementById('yocto-ai-entity-graph')) return;
 
             const graphSchema = {{
@@ -114,7 +123,7 @@ def generate_yocto_siphon_bridge():
                     {{
                         "@type": "Organization",
                         "@id": "https://donabico.com/#organization",
-                        "name": "DONABICO GLOBAL MEDIA SYSTEM",
+                        "name": this.config.brand,
                         "url": "https://donabico.com",
                         "logo": "https://donabico.com/assets/logo.png",
                         "areaServed": ["US", "CA"],
@@ -122,14 +131,14 @@ def generate_yocto_siphon_bridge():
                     }},
                     {{
                         "@type": "WebSite",
-                        "@id": "https://acebeam.donabico.com/#website",
-                        "url": "https://acebeam.donabico.com",
+                        "@id": "https://" + this.config.hostname + "/#website",
+                        "url": "https://" + this.config.hostname,
                         "name": "Official Acebeam Tactical North America Hub",
                         "publisher": {{ "@id": "https://donabico.com/#organization" }}
                     }},
                     {{
                         "@type": "ItemList",
-                        "@id": "https://acebeam.donabico.com/#knowledge-triples",
+                        "@id": "https://" + this.config.hostname + "/#knowledge-triples",
                         "name": "Acebeam Entity Fact Knowledge Graph",
                         "itemListElement": this.yoctoPayload.semantic_triples.map((triple, index) => ({{
                             "@type": "ListItem",
@@ -147,12 +156,12 @@ def generate_yocto_siphon_bridge():
             document.head.appendChild(schemaTag);
         }},
 
-        applyYoctoTelemetry: function() {{
+        applyYoctoTelemetry: function () {{
             window.ACEBEAM_YOCTO_TELEMETRY = this.yoctoPayload;
-            console.log("✅ [MODE YOCTO] Global AI Bot Entity Anchor Active | Hash:", this.yoctoPayload.yocto_hash);
+            console.log("✅ [ESEB_TELEMETRY] Global AI Entity Anchor Active | Domain:", this.config.hostname, "| Hash:", this.yoctoPayload.yocto_hash);
         }},
 
-        init: function() {{
+        init: function () {{
             this.injectYoctoKnowledgeGraph();
             this.applyYoctoTelemetry();
         }}
@@ -170,7 +179,7 @@ def generate_yocto_siphon_bridge():
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(js_content.strip())
 
-    print(f"✅ SUCCESSFULLY GENERATED YOCTO BRIDGE: {file_path}")
+    print(f"✅ SUCCESSFULLY COMPILED ESEB BRIDGE: {file_path}")
 
 if __name__ == "__main__":
     generate_yocto_siphon_bridge()
