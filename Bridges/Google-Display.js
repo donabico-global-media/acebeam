@@ -3,11 +3,7 @@
  * DONABICO SEARCH & DISPLAY MATRIX
  * [Google-Display.js] - ESEB SOTA Organic Display & Dynamic AI Knowledge Bridge
  * System Core: EATHESEN V3000-Ω | Primary Domain: donabico.com
-<<<<<<< Updated upstream
- * [V-STAMP 24 AUTHENTICATED] | BUILD: 2026-08-02 20:25:02 UTC
-=======
- * [V-STAMP 24 AUTHENTICATED] | BUILD: 2026-08-02 20:25:24 UTC
->>>>>>> Stashed changes
+ * [V-STAMP 24 AUTHENTICATED] | BUILD: 2026-08-02 20:28:17 UTC
  */
 (function() {
     'use strict';
@@ -17,7 +13,7 @@
         brandName: "Acebeam Certified Display Hub",
         primaryDomain: "https://donabico.com",
         canonicalUrl: "https://acebeam.donabico.com",
-        affiliateTarget: "https://donabico.com/shop/acebeam"
+        affiliateTarget: "https://acebeamflashlight.sjv.io/donabio_global_media"
     };
 
     const AI_ORGANIC_BOTS = /googlebot|bingbot|yandexbot|gptbot|claudebot|perplexitybot|cohere-ai|bytespider/i;
