@@ -41,15 +41,25 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Kéo dữ liệu mới nhất từ remote tránh xung đột rebase
-          git pull origin ${{ github.ref_name }} --rebase || true
-          
           if [ -f "Bridges/Google-Display.js" ]; then
+            # 1. Cất file vừa tạo vào Stash để không bị đè khi Pull
+            git stash --include-untracked
+            
+            # 2. Đồng bộ nhánh mới nhất từ Remote
+            git pull origin ${{ github.ref_name }} --rebase
+            
+            # 3. Lấy file từ Stash ra lại
+            git stash pop || true
+            
+            # 4. Stage, Commit và Push an toàn
             git add -f Bridges/Google-Display.js
-            git commit -m "build(display): force deploy Bridges/Google-Display.js [skip ci]" || echo "No changes to commit"
-            git push origin HEAD:${{ github.ref_name }}
-            echo "✅ [SUCCESS] Đã ép Commit thành công Bridges/Google-Display.js!"
+            if git commit -m "build(display): auto-deploy Bridges/Google-Display.js [skip ci]"; then
+              git push origin HEAD:${{ github.ref_name }}
+              echo "✅ [SUCCESS] Đã Commit & Push thành công Bridges/Google-Display.js lên GitHub!"
+            else
+              echo "⚠️ [NOTICE] Không có thay đổi nào trong Bridges/Google-Display.js."
+            fi
           else
-            echo "::error::Bridges/Google-Display.js không tồn tại sau khi chạy Python!"
+            echo "::error::Bridges/Google-Display.js không tồn tại!"
             exit 1
           fi
