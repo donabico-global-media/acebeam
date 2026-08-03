@@ -24,6 +24,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 🔄 Pull Latest Remote Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "DONABICO-QUANTUM-BOT"
+          git pull origin ${{ github.ref_name }} --ff-only || git rebase --abort || true
+
       - name: 🐍 Set up Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -47,8 +53,6 @@ jobs:
 
       - name: 🚀 Commit & Push Quantum Matrix & Bridges
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "DONABICO-QUANTUM-BOT"
           git add Bridges/ "Super Smart Core/" || true
           
           if git diff --staged --quiet; then
@@ -56,8 +60,6 @@ jobs:
           else
             git commit -m "🧠 [SUPER SMART CORE] 24-Thread Auto-Evolution & ESEB Bridge Compiled"
             
-            # TỰ ĐỘNG ĐỒNG BỘ DỮ LIỆU MỚI NHẤT TỪ REMOTE ĐỂ TRIỆT TIÊU LỖI NON-FAST-FORWARD
-            git pull --rebase origin ${{ github.ref_name }}
-            
-            git push origin HEAD:${{ github.ref }}
+            # ĐẨY LÊN GITHUB DÙNG CƠ CHẾ ATOMIC PUSH ĐỂ TRÁNH CONFLICT
+            git push origin HEAD:${{ github.ref }} || (git pull --rebase origin ${{ github.ref_name }} -X ours && git push origin HEAD:${{ github.ref }})
           fi
