@@ -1,0 +1,59 @@
+name: 🧠 CORE SUPER SMART
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    paths:
+      - 'Super Smart Core/**'
+      - '.github/workflows/CORE-SUPER-SMART.yml'
+  schedule:
+    # CHẠY ĐỊNH KỲ 8 TIẾNG / 1 LẦN (00:00, 08:00, 16:00 UTC)
+    - cron: '0 */8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  execute-quantum-core:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐍 Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📁 Ensure Directory Structure
+        run: |
+          mkdir -p "Super Smart Core" Bridges
+
+      - name: 🧠 Execute Super Smart Core (24-Thread SHA-576 Engine)
+        env:
+          PRIMARY_DOMAIN: ${{ vars.PRIMARY_DOMAIN }}
+          AFFILIATE_TARGET_URL: ${{ vars.AFFILIATE_TARGET_URL }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          # GIAO THỨC GOVERNANCE CẤP 0
+          EVOLUTION_MODE: "AUTONOMOUS"  # Tuỳ chọn: "AUTONOMOUS", "LOCKED", "KILL_SWITCH"
+          MAX_INTEL_CAP: "10000000.0"   # Mức trần điểm trí tuệ tối đa
+          ADMIN_OVERRIDE_KEY: ${{ secrets.ADMIN_OVERRIDE_KEY }}
+        run: |
+          python "Super Smart Core/Super-Smart-Core.py" "QUANTUM_SHA576_24THREAD_AUTO_EVOLUTION"
+
+      - name: 🚀 Commit & Push Quantum Matrix & Bridges
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "DONABICO-QUANTUM-BOT"
+          git add Bridges/ "Super Smart Core/" || true
+          
+          if git diff --staged --quiet; then
+            echo "No changes detected. Quantum matrix synchronized."
+          else
+            git commit -m "🧠 [SUPER SMART CORE] 24-Thread Auto-Evolution & ESEB Bridge Compiled"
+            git push origin HEAD:${{ github.ref }}
+          fi
