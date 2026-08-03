@@ -28,6 +28,12 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: 🔄 SYNC LATEST REMOTE CHANGES (PRE-BUILD)
+        run: |
+          git config --local user.email "scramjet-protocol@donabico.com"
+          git config --local user.name "DONABICO-SIPHON-BOT"
+          git pull --rebase origin ${{ github.ref_name }} || git rebase --abort
+
       - name: 🚀 RUN SCRAMJET-SIPHON-PROTOCOL ENGINE
         env:
           PRIMARY_DOMAIN: ${{ vars.PRIMARY_DOMAIN }}
@@ -38,9 +44,6 @@ jobs:
 
       - name: 💾 COMMIT AND SYNC ESEB BRIDGES OUTPUT
         run: |
-          git config --local user.email "scramjet-protocol@donabico.com"
-          git config --local user.name "DONABICO-SIPHON-BOT"
-          
           git add Bridges/ "Super Smart Core/"
           
           if git diff --staged --quiet; then
@@ -48,8 +51,6 @@ jobs:
           else
             git commit -m "BUILD(SCRAMJET): SYNC SCRAMJET-SIPHON-PROTOCOL MATRIX AND BRIDGE [SKIP CI]"
             
-            # Tự động đồng bộ và Rebase loại bỏ hoàn toàn xung đột Push
-            git pull --rebase origin HEAD
-            
-            git push origin HEAD
+            # Đẩy lên với cơ chế ưu tiên bản build vừa tạo nếu có xung đột phút chót
+            git push origin HEAD || (git pull --rebase -X theirs origin ${{ github.ref_name }} && git push origin HEAD)
           fi
