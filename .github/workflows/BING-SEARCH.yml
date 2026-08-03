@@ -53,3 +53,4 @@ jobs:
             git commit -m "auto(eseb): compile & sync Bing-Search.js bridge [skip ci]"
             git push origin main
           fi
+ 
