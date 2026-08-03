@@ -1,0 +1,47 @@
+name: BING SEARCH PROTOCOL
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'  # Chạy định kỳ 4 tiếng/lần
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Execute Python ESEB Core Compiler
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python Modules/Bing-Search.py
+
+      - name: Auto-Commit & Deploy Bridge to CDN
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Auto-Merge Stash Engine chống đụng độ phiên bản
+          git stash
+          git pull --rebase origin main
+          git stash pop || true
+          
+          git add Bridges/Bing-Search.js
+          if git diff --staged --quiet; then
+            echo "No changes detected in Bridges/Bing-Search.js"
+          else
+            git commit -m "auto(eseb): compile & sync Bing-Search.js bridge [skip ci]"
+            git push origin main
+          fi
