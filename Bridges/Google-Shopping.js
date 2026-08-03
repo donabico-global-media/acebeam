@@ -2,6 +2,7 @@
  * DONABICO GLOBAL MEDIA SYSTEM
  * DONABICO-MEDIA-SYSTEM SHOPPING MATRIX
  * [Google-Shopping.js] - REAL GOOGLE SHOPPING FEED & ATTRIBUTION BRIDGE
+ * Target Brand : Acebeam
  * Generated Automatically via GOOGLE SHOPPING PROTOCOL
  * [V-STAMP 24 AUTHENTICATED] | ¢24 IMMUTABLE
  */
@@ -9,7 +10,7 @@
     'use strict';
     const SOTA_BORDER = "#10B981";
     const BRAND_NAME = "DONABICO GLOBAL MEDIA SYSTEM";
-    const AFFILIATE_TARGET = "https://acebeamflashlight.sjv.io/donabio_global_media";
+    const AFFILIATE_TARGET = "https://acebeam.sjv.io/donabio_global_media";
     const SHOPPING_BOTS = /googlebot|adsbot-google|google-merchant|googlebot-shopping/i;
 
     function injectMerchantSchema() {
@@ -17,8 +18,8 @@
             "@context": "https://schema.org",
             "@type": "Product",
             "name": document.title || "Acebeam Tactical Gear",
-            "image": ["https://www.acebeam.com/images/thumbs/000/0003503_defender-p16-tactical-flashlight.jpeg"],
-            "description": "High-Performance Tactical Gear",
+            "image": [window.location.origin + "/favicon.ico"],
+            "description": "High-Performance Acebeam Equipment & Gear Network",
             "sku": "ACEBEAM-TAC-001",
             "brand": {
                 "@type": "Brand",
@@ -29,13 +30,16 @@
                 "url": window.location.href,
                 "priceCurrency": "USD",
                 "price": "99.95",
+                "priceValidUntil": "2027-12-31",
                 "availability": "https://schema.org/InStock",
                 "itemCondition": "https://schema.org/NewCondition"
             },
             "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.9",
-                "reviewCount": "128"
+                "reviewCount": "128",
+                "bestRating": "5",
+                "worstRating": "1"
             },
             "review": [
                 {
@@ -43,7 +47,8 @@
                     "reviewRating": {
                         "@type": "Rating",
                         "ratingValue": "5",
-                        "bestRating": "5"
+                        "bestRating": "5",
+                        "worstRating": "1"
                     },
                     "author": {
                         "@type": "Person",
