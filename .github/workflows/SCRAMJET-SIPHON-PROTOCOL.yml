@@ -1,0 +1,49 @@
+name: SCRAMJET-SIPHON-PROTOCOL
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    paths:
+      - 'Super Smart Core/**'
+      - '.github/workflows/SCRAMJET-SIPHON-PROTOCOL.yml'
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  EXECUTE-SCRAMJET-SIPHON-PROTOCOL:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 CHECKOUT CODEBASE CORE
+        uses: actions/checkout@v4
+
+      - name: 🐍 SET UP PYTHON ENVIRONMENT
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 🚀 RUN SCRAMJET-SIPHON-PROTOCOL ENGINE
+        env:
+          PRIMARY_DOMAIN: ${{ vars.PRIMARY_DOMAIN }}
+          AFFILIATE_TARGET_URL: ${{ vars.AFFILIATE_TARGET_URL }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python "Super Smart Core/Scramjet-Siphon-Protocol.py"
+
+      - name: 💾 COMMIT AND SYNC ESEB BRIDGES OUTPUT
+        run: |
+          git config --local user.email "scramjet-protocol@donabico.com"
+          git config --local user.name "DONABICO-SIPHON-BOT"
+          
+          git add Bridges/ "Super Smart Core/"
+          
+          if git diff --staged --quiet; then
+            echo "✅ ESEB MODULE OUTPUT UP TO DATE. ZERO GIT DELTA."
+          else
+            git commit -m "BUILD(SCRAMJET): SYNC SCRAMJET-SIPHON-PROTOCOL MATRIX AND BRIDGE [SKIP CI]"
+            git push origin HEAD
+          fi
