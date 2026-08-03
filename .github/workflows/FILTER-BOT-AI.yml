@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: eseb-filter-bot-ai-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-firewall:
     runs-on: ubuntu-latest
@@ -22,9 +26,12 @@ jobs:
       - name: Set up Python Environment
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       - name: Execute Filter Compiler
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: |
           if [ -f "Modules/Filter-Bot-AI.py" ]; then
             python Modules/Filter-Bot-AI.py
@@ -39,9 +46,18 @@ jobs:
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           
           if [ -f "Bridges/Filter-Bot-AI.js" ]; then
+            # BƯỚC ĐỒNG BỘ CHỐNG XUNG ĐỘT (GIT SOFT RESET)
+            git fetch origin ${{ github.ref_name }}
+            git reset --soft origin/${{ github.ref_name }}
+            
             git add Bridges/Filter-Bot-AI.js
-            git diff-index --quiet HEAD || git commit -m "security(eseb): refresh bot filter core [skip ci]"
-            git push origin HEAD:${{ github.ref_name }}
+            
+            if git diff --staged --quiet; then
+              echo "[ESEB Security] Không có thay đổi trong Bridges/Filter-Bot-AI.js."
+            else
+              git commit -m "security(eseb): refresh bot filter core [skip ci]"
+              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+            fi
           else
             echo "::error::Tep cau noi Bridges/Filter-Bot-AI.js khong duoc tao ra!"
             exit 1
