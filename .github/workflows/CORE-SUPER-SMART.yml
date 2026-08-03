@@ -39,8 +39,8 @@ jobs:
           AFFILIATE_TARGET_URL: ${{ vars.AFFILIATE_TARGET_URL }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           # GIAO THỨC GOVERNANCE CẤP 0
-          EVOLUTION_MODE: "AUTONOMOUS"  # Tuỳ chọn: "AUTONOMOUS", "LOCKED", "KILL_SWITCH"
-          MAX_INTEL_CAP: "10000000.0"   # Mức trần điểm trí tuệ tối đa
+          EVOLUTION_MODE: "AUTONOMOUS"
+          MAX_INTEL_CAP: "10000000.0"
           ADMIN_OVERRIDE_KEY: ${{ secrets.ADMIN_OVERRIDE_KEY }}
         run: |
           python "Super Smart Core/Super-Smart-Core.py" "QUANTUM_SHA576_24THREAD_AUTO_EVOLUTION"
@@ -55,5 +55,9 @@ jobs:
             echo "No changes detected. Quantum matrix synchronized."
           else
             git commit -m "🧠 [SUPER SMART CORE] 24-Thread Auto-Evolution & ESEB Bridge Compiled"
+            
+            # TỰ ĐỘNG ĐỒNG BỘ DỮ LIỆU MỚI NHẤT TỪ REMOTE ĐỂ TRIỆT TIÊU LỖI NON-FAST-FORWARD
+            git pull --rebase origin ${{ github.ref_name }}
+            
             git push origin HEAD:${{ github.ref }}
           fi
