@@ -62,7 +62,10 @@ class SuperSmartCoreEngine:
         self._RAW_AXIOM = 24
         self._GOLDEN_RATIO = (1 + math.sqrt(5)) / 2
         self.governance = AdminGovernanceProtocol()
-        self.primary_domain = os.getenv("PRIMARY_DOMAIN", "donabico.com").strip()
+        
+        raw_domain = os.getenv("PRIMARY_DOMAIN", "").strip()
+        self.primary_domain = raw_domain if raw_domain else "donabico.com"
+        
         self.brand_organization = "DONABICO GLOBAL MEDIA SYSTEM"
         
         raw_repo = os.getenv("GITHUB_REPOSITORY", "donabico-global-media/acebeam")
@@ -170,8 +173,10 @@ class SuperSmartCoreEngine:
         
         affiliate_target = self._get_eseb_affiliate_target()
         current_utc = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+        primary_base = f"https://{self.primary_domain}"
         canonical_url = f"https://{self.repo_slug}.{self.primary_domain}"
 
+        # 1. COMPILE SUPER-SMART-CORE.JS
         core_js_path = os.path.join(self.bridges_dir, "Super-Smart-Core.js")
         core_js_content = f"""/**
  * {self.brand_organization}
@@ -183,7 +188,7 @@ class SuperSmartCoreEngine:
     'use strict';
     const CONFIG = {{
         orgName: "{self.brand_organization}",
-        primaryDomain: "https://{self.primary_domain}",
+        primaryDomain: "{primary_base}",
         canonicalUrl: "{canonical_url}",
         affiliateTarget: "{affiliate_target}"
     }};
@@ -215,18 +220,19 @@ class SuperSmartCoreEngine:
         with open(core_js_path, "w", encoding="utf-8") as f:
             f.write(core_js_content.strip())
 
+        # 2. COMPILE SUPER-SMART-INDEX.JS
         index_js_path = os.path.join(self.bridges_dir, "Super-Smart-Index.js")
         index_js_content = f"""/**
  * {self.brand_organization}
  * Super-Smart-Index.js - Advanced SEO & AI Indexing Bridge
- * Core Engine: Super Smart Core/Super-Smart-Core.py
+ * Source: Super Smart Core/Super-Smart-Core.py
  * [ESEB SOTA 2026 CERTIFIED] | SYNC BUILD: {current_utc}
  */
 (function() {{
     'use strict';
     const INDEX_CONFIG = {{
         orgName: "{self.brand_organization}",
-        primaryDomain: "https://{self.primary_domain}",
+        primaryDomain: "{primary_base}",
         canonicalUrl: "{canonical_url}",
         repoSlug: "{self.repo_slug}"
     }};
@@ -288,8 +294,8 @@ class SuperSmartCoreEngine:
             f.write(index_js_content.strip())
 
         print(f"[SUPER SMART CORE - ESEB SYNC] Cycle: {self.state['recursive_cycle']}")
-        print(f"|> Compiled Bridge: {core_js_path}")
-        print(f"|> Compiled Index:  {index_js_path}")
+        print(f"|> Compiled Core Bridge: {core_js_path}")
+        print(f"|> Compiled Index Bridge: {index_js_path}")
 
 if __name__ == "__main__":
     raw_payload = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else ""
