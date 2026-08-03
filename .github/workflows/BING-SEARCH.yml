@@ -33,11 +33,19 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Auto-Merge Stash Engine chống đụng độ phiên bản
-          git stash
+          # 1. Đưa tệp mới sinh vào Staged để Git nhận diện
+          git add Bridges/Bing-Search.js
+          
+          # 2. Lưu an toàn vào Stash (bao gồm cả untracked)
+          git stash --include-untracked
+          
+          # 3. Kéo bản mới nhất từ remote về bằng Rebase
           git pull --rebase origin main
+          
+          # 4. Trả lại tệp đã biên dịch
           git stash pop || true
           
+          # 5. Kiểm tra và Commit / Push
           git add Bridges/Bing-Search.js
           if git diff --staged --quiet; then
             echo "No changes detected in Bridges/Bing-Search.js"
