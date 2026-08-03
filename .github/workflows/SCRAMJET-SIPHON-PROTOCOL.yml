@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: 📥 CHECKOUT CODEBASE CORE
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: 🐍 SET UP PYTHON ENVIRONMENT
         uses: actions/setup-python@v5
@@ -45,5 +47,9 @@ jobs:
             echo "✅ ESEB MODULE OUTPUT UP TO DATE. ZERO GIT DELTA."
           else
             git commit -m "BUILD(SCRAMJET): SYNC SCRAMJET-SIPHON-PROTOCOL MATRIX AND BRIDGE [SKIP CI]"
+            
+            # Tự động đồng bộ và Rebase loại bỏ hoàn toàn xung đột Push
+            git pull --rebase origin HEAD
+            
             git push origin HEAD
           fi
