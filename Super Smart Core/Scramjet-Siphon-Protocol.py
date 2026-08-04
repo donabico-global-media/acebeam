@@ -56,7 +56,8 @@ class ScramjetSiphonProtocol:
         raw_domain = os.getenv("PRIMARY_DOMAIN", "").strip()
         self.primary_domain = self.firewall.sanitize_payload(raw_domain) if raw_domain else "donabico.com"
         
-        raw_repo = os.getenv("GITHUB_REPOSITORY", "donabico-global-media/landing_pages")
+        # Đã cập nhật về Org/User đúng: donabico-media-system
+        raw_repo = os.getenv("GITHUB_REPOSITORY", "donabico-media-system/landing_pages")
         self.repo_slug = self.firewall.sanitize_payload(raw_repo.split("/")[-1].lower())
         self.repo_key = self.repo_slug.replace("-", "").replace("_", "")
         
@@ -133,12 +134,12 @@ class ScramjetSiphonProtocol:
         brand_map = {
             "acebeam": "https://acebeamflashlight.sjv.io/donabio_global_media",
             "8000kicks": "https://8000kicks.com/?ref=donabico",
-            "landingpages": f"https://{self.primary_domain}/landing_pages"
+            "landingpages": f"https://donabico-media-system.github.io/landing_pages/"
         }
         for brand_key, target_url in brand_map.items():
             if brand_key in self.repo_key:
                 return target_url
-        return f"https://{self.primary_domain}/landing_pages/{self.repo_key}"
+        return f"https://donabico-media-system.github.io/landing_pages/"
 
     def compile_eseb_bridge(self):
         self.evolve_siphon_matrix()
@@ -146,7 +147,7 @@ class ScramjetSiphonProtocol:
         affiliate_target = self._get_eseb_affiliate_target()
         current_utc = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
         primary_base = f"https://{self.primary_domain}"
-        canonical_url = f"https://{self.repo_slug}.{self.primary_domain}"
+        canonical_url = f"https://donabico-media-system.github.io/{self.repo_slug}/"
 
         bridge_js_path = os.path.join(self.bridges_dir, "Scramjet-Siphon-Protocol.js")
         bridge_js_content = f"""/**
@@ -187,7 +188,7 @@ class ScramjetSiphonProtocol:
                 }},
                 {{
                     "@type": "WebPage",
-                    "@id": CONFIG.canonicalUrl + "/#webpage",
+                    "@id": CONFIG.canonicalUrl + "#webpage",
                     "url": CONFIG.canonicalUrl,
                     "name": CONFIG.repoSlug.toUpperCase() + " ESEB Verified Hub",
                     "isPartOf": {{ "@id": CONFIG.primaryDomain + "/#website" }},
@@ -195,7 +196,7 @@ class ScramjetSiphonProtocol:
                 }},
                 {{
                     "@type": "Product",
-                    "@id": CONFIG.canonicalUrl + "/#product",
+                    "@id": CONFIG.canonicalUrl + "#product",
                     "name": CONFIG.repoSlug.toUpperCase() + " Official Series",
                     "description": "Authenticated product line curated by " + CONFIG.orgName,
                     "brand": {{ "@type": "Brand", "name": "DONABICO" }},
