@@ -1,8 +1,8 @@
-name: FILTER BOT AI PROTOCOL
+name: "FILTER BOT AI PROTOCOL"
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # Chu kỳ chuẩn 4 tiếng một lần tự động làm mới tường lửa
+    - cron: '0 */4 * * *'  # Tự động làm mới tường lửa 4 tiếng/lần
   push:
     branches: [ "main", "master" ]
   workflow_dispatch:
@@ -36,29 +36,23 @@ jobs:
           if [ -f "Modules/Filter-Bot-AI.py" ]; then
             python Modules/Filter-Bot-AI.py
           else
-            echo "::error::Khong tim thay Modules/Filter-Bot-AI.py!"
+            echo "::error::Không tìm thấy Modules/Filter-Bot-AI.py!"
             exit 1
           fi
 
-      - name: Sync Firewall Core to Root
+      - name: Auto-Merge Stash & Deploy JS Bridge
         run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           
           if [ -f "Bridges/Filter-Bot-AI.js" ]; then
-            # BƯỚC ĐỒNG BỘ CHỐNG XUNG ĐỘT (GIT SOFT RESET)
-            git fetch origin ${{ github.ref_name }}
-            git reset --soft origin/${{ github.ref_name }}
-            
+            git stash
+            git pull origin ${{ github.ref_name }} --rebase
+            git stash pop || true
             git add Bridges/Filter-Bot-AI.js
-            
-            if git diff --staged --quiet; then
-              echo "[ESEB Security] Không có thay đổi trong Bridges/Filter-Bot-AI.js."
-            else
-              git commit -m "security(eseb): refresh bot filter core [skip ci]"
-              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
-            fi
+            git commit -m "security(eseb): refresh bot filter core [skip ci]" || exit 0
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
           else
-            echo "::error::Tep cau noi Bridges/Filter-Bot-AI.js khong duoc tao ra!"
+            echo "::error::Tệp Bridges/Filter-Bot-AI.js không được tạo ra!"
             exit 1
           fi
