@@ -1,7 +1,7 @@
 /* ================================================================= */
 /* DONABICO GLOBAL MEDIA SYSTEM - BOT HANDSHAKE TELEMETRY BRIDGE      */
 /* Node: EATHESEN V3000-Ω | Universal Crawler Alliance Protocol     */
-/* ¢24 IMMUTABLE | Zero-UI Impact | Google & Bing & Yahoo Compliant  */
+/* ¢24 IMMUTABLE | Zero-UI Impact | SOTA 2026 Anti-Detection & AEO  */
 /* ================================================================= */
 
 (function() {
@@ -18,6 +18,36 @@
         isFriendlyBot: function() {
             const ua = navigator.userAgent.toLowerCase();
             return this.botSignatures.some(bot => ua.includes(bot));
+        },
+
+        injectAntiDetection: function() {
+            // 1. Anti-Bot Canvas Fingerprint Noise
+            try {
+                const origGetContext = HTMLCanvasElement.prototype.getContext;
+                HTMLCanvasElement.prototype.getContext = function(type, flags) {
+                    const ctx = origGetContext.apply(this, arguments);
+                    if (type === '2d' && ctx) {
+                        const origFillText = ctx.fillText;
+                        ctx.fillText = function() {
+                            ctx.fillStyle = 'rgba(255,255,255,0.01)';
+                            return origFillText.apply(this, arguments);
+                        };
+                    }
+                    return ctx;
+                };
+            } catch (e) {}
+
+            // 2. Human Behavior Trigger (Jitter Detection)
+            window.__ESEB_HUMAN_VERIFIED = false;
+            const triggerHuman = () => {
+                window.__ESEB_HUMAN_VERIFIED = true;
+                window.removeEventListener('mousemove', triggerHuman);
+                window.removeEventListener('touchstart', triggerHuman);
+                window.removeEventListener('scroll', triggerHuman);
+            };
+            window.addEventListener('mousemove', triggerHuman, { passive: true });
+            window.addEventListener('touchstart', triggerHuman, { passive: true });
+            window.addEventListener('scroll', triggerHuman, { passive: true });
         },
 
         injectCanonicalAndMeta: function() {
@@ -63,6 +93,16 @@
                         "url": `https://${domain}`,
                         "name": document.title || "EATHESEN Global System",
                         "publisher": { "@id": `https://${domain}/#organization` }
+                    },
+                    {
+                        "@type": "WebPage",
+                        "@id": window.location.href + "#webpage",
+                        "url": window.location.href,
+                        "name": document.title || "EATHESEN Portal",
+                        "speakable": {
+                            "@type": "SpeakableSpecification",
+                            "cssSelector": ["h1", ".hero-title", ".affiliate-description"]
+                        }
                     }
                 ]
             };
@@ -100,6 +140,7 @@
         },
 
         init: function() {
+            this.injectAntiDetection();
             this.injectCanonicalAndMeta();
             this.injectEATKnowledgeGraph();
             this.triggerIndexNowTelemetry();
