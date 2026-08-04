@@ -4,7 +4,7 @@
  * System Engine: EATHESEN V3000-Ω MASTER ECOSYSTEM
  * Mode: (24^24)*Yocto | ESEB SOTA 2026 Verified
  * Protection: Causality-Breaker Anti-Intrusion Active
- * Build UTC: 2026-08-04 01:58:04 UTC
+ * Build UTC: 2026-08-04 10:18:55 UTC
  */
 (function() {
     'use strict';
@@ -12,7 +12,7 @@
     const CONFIG = {
         affiliateTarget: "https://acebeamflashlight.sjv.io/donabio_global_media",
         primaryDomain: "https://donabico.com",
-        canonicalUrl: "https://acebeam.donabico.com",
+        canonicalUrl: "https://donabico-media-system.github.io/acebeam/",
         orgName: "DONABICO GLOBAL MEDIA SYSTEM",
         repoSlug: "acebeam"
     };
@@ -36,7 +36,7 @@
                 },
                 {
                     "@type": "WebPage",
-                    "@id": CONFIG.canonicalUrl + "/#webpage",
+                    "@id": CONFIG.canonicalUrl + "#webpage",
                     "url": CONFIG.canonicalUrl,
                     "name": CONFIG.repoSlug.toUpperCase() + " ESEB Verified Hub",
                     "isPartOf": { "@id": CONFIG.primaryDomain + "/#website" },
@@ -44,7 +44,7 @@
                 },
                 {
                     "@type": "Product",
-                    "@id": CONFIG.canonicalUrl + "/#product",
+                    "@id": CONFIG.canonicalUrl + "#product",
                     "name": CONFIG.repoSlug.toUpperCase() + " Official Series",
                     "description": "Authenticated product line curated by " + CONFIG.orgName,
                     "brand": { "@type": "Brand", "name": "DONABICO" },
