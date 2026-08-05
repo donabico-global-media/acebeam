@@ -22,25 +22,24 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: 3. Execute ESEB Python Core Engine
+      - name: 3. Sync Latest Codebase
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
+
+      - name: 4. Execute ESEB Python Core Engine
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           python Modules/GEO-Contextual-Baiting.py
 
-      - name: 4. Auto-Merge Stash & Commit JS Bridge (Zero-Conflict)
+      - name: 5. Force Commit Clean JS Bridge
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          git stash
-          git pull --rebase origin main
-          git stash pop || true
-          
           git add Bridges/GEO-Contextual-Baiting.js
           if git diff --staged --quiet; then
             echo "No changes detected in Bridge file. Skipping commit."
           else
-            git commit -m "build(eseb): auto-compile GEO-Contextual-Baiting.js [skip ci]"
+            git commit -m "build(eseb): auto-compile clean GEO-Contextual-Baiting.js [skip ci]"
             git push origin main
           fi
