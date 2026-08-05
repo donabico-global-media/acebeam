@@ -1,0 +1,47 @@
+# ==============================================================================
+# WORKFLOW SPECIFICATION FILE: .github/workflows/AI-HANDSHAKE-COMPILER.yml
+# ECOSYSTEM: EATHESEN V3000-Ω MASTER ECOSYSTEM
+# BRAND IDENTITY: DONABICO GLOBAL MEDIA SYSTEM
+# SEAL STAMP: V-STAMP-24
+# ARCHITECTURE: ESEB LIVING ENGINE (ZERO-LOAD DYNAMIC COMPILER)
+# ==============================================================================
+
+name: AI-HANDSHAKE-COMPILER
+on:
+  push:
+    paths:
+      - 'Protocols/Universal-AI-Bot-Handshake-SOTA.eseb'
+
+jobs:
+  build-ehc-living-entity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Create Bridges Directory
+        run: mkdir -p Bridges
+
+      - name: Execute ESEB Core Engine Export
+        run: |
+          node -e "
+            const fs = require('fs');
+            const esebContent = fs.readFileSync('Protocols/Universal-AI-Bot-Handshake-SOTA.eseb', 'utf8');
+            const ehcCodeMatch = esebContent.match(/ehc_executable_code_template:\s*\|([\s\S]*?)(?=\n[a-z_]+:|$)/);
+            if (ehcCodeMatch) {
+              const cleanEhcCode = ehcCodeMatch[1].trim();
+              fs.writeFileSync('Bridges/Universal-AI-Bot-Handshake-SOTA.ehc', cleanEhcCode);
+              console.log('✅ Bridges/Universal-AI-Bot-Handshake-SOTA.ehc successfully compiled.');
+            } else {
+              console.error('❌ Failed to extract EHC executable template.');
+              process.exit(1);
+            }
+          "
+
+      - name: Commit & Push Living Entity (.ehc)
+        run: |
+          git config --global user.name "ESEB-Engine-Bot"
+          git config --global user.email "bot@donabico.com"
+          git add Bridges/Universal-AI-Bot-Handshake-SOTA.ehc
+          git commit -m "build(eseb): compile Universal-AI-Bot-Handshake-SOTA.ehc [V-STAMP-24]" || exit 0
+          git push
