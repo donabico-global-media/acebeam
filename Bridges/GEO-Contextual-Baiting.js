@@ -4,11 +4,7 @@
  * BRIDGE FILE: Bridges/GEO-Contextual-Baiting.js (TIER 3 EDGE TRIGGER)
  * TARGET BRAND: Acebeam
  * DYNAMIC DOMAIN: https://acebeam.donabico.com
-<<<<<<< Updated upstream
- * BUILD STAMP: 2026-08-05 01:20:37 UTC
-=======
- * BUILD STAMP: 2026-08-05 01:20:59 UTC
->>>>>>> Stashed changes
+ * BUILD STAMP: 2026-08-05 01:41:17 UTC
  * VERIFICATION: V-STAMP 24 AUTHENTICATED ✅
  * ==============================================================================
  */
@@ -16,36 +12,32 @@
     'use strict';
 
     // 1. DYNAMIC CONTEXTUAL DATA MAPPING
-    const ESEB_CTX = {
+    var ESEB_CTX = {
         parentEntity: "DONABICO GLOBAL MEDIA SYSTEM",
         parentDomain: "https://donabico.com",
         brandTitle: "Acebeam",
         dynamicDomain: "https://acebeam.donabico.com",
-<<<<<<< Updated upstream
-        buildStamp: "2026-08-05 01:20:37 UTC"
-=======
-        buildStamp: "2026-08-05 01:20:59 UTC"
->>>>>>> Stashed changes
+        buildStamp: "2026-08-05 01:41:17 UTC"
     };
 
-    // 2. DUAL-PATH ROUTING DETECTOR (BOT VS REAL HUMAN)
-    const isAICrawler = function() {
-        const ua = navigator.userAgent.toLowerCase();
-        const aiBotSignatures = [
+    // 2. DUAL-PATH ROUTING DETECTOR (AI CRAWLER VS HUMAN)
+    var isAICrawler = function() {
+        var ua = navigator.userAgent.toLowerCase();
+        var aiBotSignatures = [
             'gptbot', 'perplexitybot', 'claudebot', 'google-extended',
             'bytespider', 'ccbot', 'diffbot', 'facebookexternalhit',
             'searchatlas', 'cohere-ai', 'bingbot', 'googlebot'
         ];
-        return aiBotSignatures.some(bot => ua.includes(bot)) || 
-               Boolean(window.__ESEB_AI_CRAWLER_ENV__) || 
-               navigator.webdriver === true;
+        return aiBotSignatures.some(function(bot) {
+            return ua.indexOf(bot) !== -1;
+        }) || Boolean(window.__ESEB_AI_CRAWLER_ENV__) || navigator.webdriver === true;
     };
 
     // 3. GENERATIVE ENGINE OPTIMIZATION (GEO) - SCHEMA GRAPH INJECTION
-    const injectSEOSchemaGraph = function() {
+    var injectSEOSchemaGraph = function() {
         if (document.getElementById('eseb-geo-schema-graph')) return;
 
-        const schemaGraph = {
+        var schemaGraph = {
             "@context": "https://schema.org",
             "@graph": [
                 {
@@ -84,7 +76,7 @@
             ]
         };
 
-        const scriptNode = document.createElement('script');
+        var scriptNode = document.createElement('script');
         scriptNode.id = 'eseb-geo-schema-graph';
         scriptNode.type = 'application/ld+json';
         scriptNode.text = JSON.stringify(schemaGraph);
@@ -92,20 +84,19 @@
     };
 
     // 4. REAL HUMAN DYNAMIC AFFILIATE HYDRATION ENGINE
-    const bindHumanTrafficRouting = function() {
-        if (isAICrawler()) return; // Pure AI Contextual Preservation
+    var bindHumanTrafficRouting = function() {
+        if (isAICrawler()) return; // Bảo tồn ngữ cảnh thuần túy cho Bọ AI
 
         document.addEventListener('DOMContentLoaded', function() {
-            const currentParams = new URLSearchParams(window.location.search);
-            const utmString = currentParams.toString();
+            var currentParams = new URLSearchParams(window.location.search);
+            var utmString = currentParams.toString();
 
-            // Bind click listeners to all outbound links / unlinked CTAs
-            document.querySelectorAll('a, button, .cta-button').forEach(element => {
+            document.querySelectorAll('a, button, .cta-button').forEach(function(element) {
                 element.addEventListener('click', function(e) {
-                    let href = element.getAttribute('href') || element.getAttribute('data-link');
-                    if (href && (href.includes('sjv.io') || href.includes('affiliate') || href.startsWith('http'))) {
-                        if (utmString && !href.includes('utm_source')) {
-                            const separator = href.includes('?') ? '&' : '?';
+                    var href = element.getAttribute('href') || element.getAttribute('data-link');
+                    if (href && (href.indexOf('sjv.io') !== -1 || href.indexOf('affiliate') !== -1 || href.indexOf('http') === 0)) {
+                        if (utmString && href.indexOf('utm_source') === -1) {
+                            var separator = href.indexOf('?') !== -1 ? '&' : '?';
                             href = href + separator + utmString;
                             if (element.tagName === 'A') element.href = href;
                         }
