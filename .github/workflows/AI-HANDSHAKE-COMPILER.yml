@@ -3,7 +3,7 @@
 # ECOSYSTEM: EATHESEN V3000-Ω MASTER ECOSYSTEM
 # BRAND IDENTITY: DONABICO GLOBAL MEDIA SYSTEM
 # SEAL STAMP: V-STAMP-24
-# ARCHITECTURE: ESEB LIVING ENGINE (DUAL-TRIGGER COMPILER)
+# ARCHITECTURE: ESEB LIVING ENGINE (DUAL-TRIGGER COMPILER WITH AUTO-REBASE)
 # ==============================================================================
 
 name: AI-HANDSHAKE-COMPILER
@@ -13,7 +13,7 @@ on:
     paths:
       - 'Protocols/Universal-AI-Bot-Handshake-SOTA.eseb'
   schedule:
-    - cron: '0 */4 * * *' # TỰ ĐỘNG CHẠY 4 TIẾNG 01 LẦN (00:00, 04:00, 08:00, 12:00, 16:00, 20:00 UTC)
+    - cron: '0 */4 * * *' # TỰ ĐỘNG CHẠY 4 TIẾNG 01 LẦN
   workflow_dispatch: # KÍCH HOẠT NÚT "RUN WORKFLOW" THỦ CÔNG BẰNG TAY
 
 jobs:
@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # TẢI TOÀN BỘ LỊCH SỬ GIT ĐỂ REBASE KHÔNG LỖI
 
       - name: Create Bridges Directory
         run: mkdir -p Bridges
@@ -58,5 +60,10 @@ jobs:
           git config --global user.name "ESEB-Engine-Bot"
           git config --global user.email "bot@donabico.com"
           git add Bridges/Universal-AI-Bot-Handshake-SOTA.ehc
-          git commit -m "build(eseb): compile Universal-AI-Bot-Handshake-SOTA.ehc [V-STAMP-24]" || exit 0
-          git push
+          if ! git diff --staged --quiet; then
+            git commit -m "build(eseb): compile Universal-AI-Bot-Handshake-SOTA.ehc [V-STAMP-24]"
+            git pull --rebase origin main
+            git push origin main
+          else
+            console.log("No changes detected in Bridges/Universal-AI-Bot-Handshake-SOTA.ehc")
+          fi
