@@ -1,0 +1,126 @@
+# ==============================================================================
+# PROTOCOL SPECIFICATION FILE: Protocols/Universal-AI-Bot-Handshake-SOTA.eseb
+# ECOSYSTEM: EATHESEN V3000-Ω MASTER ECOSYSTEM
+# BRAND IDENTITY: DONABICO GLOBAL MEDIA SYSTEM
+# SEAL STAMP: V-STAMP-24
+# ARCHITECTURE: ESEB LIVING ENGINE (GLOBAL ALL-BOT & AI AGENT HANDSHAKE MATRIX)
+# ENTROPY STATUS: ZERO ENTROPY DIVERGENCE (δ = 0.00000000000000)
+# ==============================================================================
+
+eseb_protocol_identity:
+  protocol_id: "PROTO-ESEB-ALL-BOT-HANDSHAKE-V3000-OMEGA"
+  protocol_name: "UNIVERSAL-AI-BOT-HANDSHAKE-SOTA"
+  version: "V3000-Ω.2026.ULTIMATE-SOTA"
+  seal_stamp: "V-STAMP-24"
+  brand_identity: "DONABICO GLOBAL MEDIA SYSTEM"
+  target_output_bridge: "Bridges/Universal-AI-Bot-Handshake-SOTA.ehc"
+
+comprehensive_global_bot_and_ai_agent_matrix:
+  google_fleet:
+    - Googlebot
+    - Googlebot-Image
+    - Google-Extended
+    - AdsBot-Google
+    - Storebot-Google
+  microsoft_bing_fleet:
+    - bingbot
+    - BingPreview
+    - msnbot
+    - MicrosoftPreview
+  yahoo_fleet:
+    - Yahoo! Slurp|Slurp
+  sota_ai_agents:
+    - GPTBot
+    - ClaudeBot|Claude-Web
+    - PerplexityBot
+    - Applebot
+    - cohere-ai
+    - Meta-ExternalAgent
+  social_and_affiliate_crawlers:
+    - facebookexternalhit|facebookcatalog
+    - Twitterbot
+    - Pinterest
+    - Bytespider|ByteDance
+  global_search_fleet:
+    - Yandex
+    - Baiduspider
+    - DuckDuckBot
+    - Sogou
+
+ehc_executable_code_template: |
+  (function() {
+    'use strict';
+    const STAMP = "V-STAMP-24";
+    const BRAND = "DONABICO GLOBAL MEDIA SYSTEM";
+    const PROTOCOL = "UNIVERSAL-AI-BOT-HANDSHAKE-SOTA";
+    const ENTROPY_DELTA = 0.00000000000000;
+
+    // Global All-Bot & AI Agent Matrix Regex
+    const BOT_REGEX = /googlebot|google-extended|adsbot-google|storebot-google|bingbot|bingpreview|msnbot|microsoftpreview|slurp|yahoo|gptbot|claudebot|claude-web|perplexitybot|applebot|cohere-ai|meta-externalagent|facebookexternalhit|twitterbot|pinterest|bytespider|bytedance|yandex|baiduspider|duckduckbot|sogou/i;
+
+    const domainContext = window.location.hostname;
+    const isMatchedBot = BOT_REGEX.test(navigator.userAgent);
+
+    // 1. CSS Sentinel Injection (SOTA Green Border Style)
+    if (!document.getElementById("Ehc-Sentinel-AI-Bot-Handshake")) {
+      const style = document.createElement('style');
+      style.id = "Ehc-Sentinel-AI-Bot-Handshake";
+      style.textContent = `
+        script[type="application/ld+json"][data-eseb-injected="true"] { display: none !important; }
+        [data-eseb-active-module="Universal-AI-Bot-Handshake-SOTA"] {
+          border: 1px solid #00FF66 !important;
+          box-shadow: 0 0 10px rgba(0, 255, 102, 0.3) !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // 2. Auto-Repair GSC Schema JSON-LD Injection
+    if (!document.getElementById("Eseb-Schema-JSONLD-AI-Handshake")) {
+      const schemaScript = document.createElement('script');
+      schemaScript.id = "Eseb-Schema-JSONLD-AI-Handshake";
+      schemaScript.type = "application/ld+json";
+      schemaScript.setAttribute("data-eseb-injected", "true");
+      
+      const schemaPayload = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": `https://${domainContext}/#website`,
+            "url": `https://${domainContext}/`,
+            "name": BRAND,
+            "publisher": { "@type": "Organization", "name": BRAND, "identifier": STAMP }
+          },
+          {
+            "@type": "Product",
+            "@id": `https://${domainContext}/#product`,
+            "name": `${BRAND} Global Offer Engine`,
+            "brand": { "@type": "Brand", "name": BRAND },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "USD",
+              "price": "0.00",
+              "availability": "https://schema.org/InStock",
+              "validFrom": "2026-01-01T00:00:00Z",
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "US",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                "merchantReturnDays": 30
+              },
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": { "@type": "MonetaryAmount", "value": 0, "currency": "USD" },
+                "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "US" }
+              }
+            }
+          }
+        ]
+      };
+      schemaScript.textContent = JSON.stringify(schemaPayload);
+      document.head.appendChild(schemaScript);
+    }
+
+    console.log(`[ESEB ENGINE] ${PROTOCOL} ACTIVE | BIND: ${BRAND} | MATCHED_BOT: ${isMatchedBot} | STAMP: ${STAMP} | δ = ${ENTROPY_DELTA}`);
+  })();
