@@ -4,7 +4,7 @@
  * BRIDGE FILE: Bridges/GEO-Contextual-Baiting.js (TIER 3 EDGE TRIGGER)
  * TARGET BRAND: Acebeam
  * DYNAMIC DOMAIN: https://acebeam.donabico.com
- * BUILD STAMP: 2026-08-05 01:19:39 UTC
+ * BUILD STAMP: 2026-08-05 01:18:17 UTC
  * VERIFICATION: V-STAMP 24 AUTHENTICATED ✅
  * ==============================================================================
  */
@@ -17,7 +17,7 @@
         parentDomain: "https://donabico.com",
         brandTitle: "Acebeam",
         dynamicDomain: "https://acebeam.donabico.com",
-        buildStamp: "2026-08-05 01:19:39 UTC"
+        buildStamp: "2026-08-05 01:18:17 UTC"
     };
 
     // 2. DUAL-PATH ROUTING DETECTOR (BOT VS REAL HUMAN)
