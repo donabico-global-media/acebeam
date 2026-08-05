@@ -65,5 +65,5 @@ jobs:
             git pull --rebase origin main
             git push origin main
           else
-            console.log("No changes detected in Bridges/Universal-AI-Bot-Handshake-SOTA.ehc")
+            echo "No changes detected in Bridges/Universal-AI-Bot-Handshake-SOTA.ehc"
           fi
