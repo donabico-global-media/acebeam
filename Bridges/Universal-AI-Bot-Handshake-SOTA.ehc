@@ -72,23 +72,5 @@
       document.head.appendChild(schemaScript);
     }
 
-    // 3. Telemetry Initial Log & Real-time Q-Learning Loop (24/7 F12 Live Feed)
-    console.log(`[ENHANCED MCP/A2A + PMax + SEO/ADS + Node.js] 24/7 Connection Active`);
     console.log(`[ESEB ENGINE] ${PROTOCOL} ACTIVE | BIND: ${BRAND} | MATCHED_BOT: ${isMatchedBot} | STAMP: ${STAMP} | δ = ${ENTROPY_DELTA}`);
-    console.log(`[V-STAMP 24 | HYPER MAX Q-LEARNING] SUPER SMART INTELLIGENT CORE v2`);
-
-    let qStep = 1;
-    let epsilon = 0.314;
-
-    setInterval(() => {
-      const timestamp = new Date().toISOString();
-      const qScore = (Math.random() * 3 + 1.5).toFixed(4);
-      epsilon = Math.max(0.01, (epsilon - 0.005)).toFixed(3);
-
-      console.log(`[HYPER MAX Q-LEARNING] Updated Q(ECO_HIGH_L_S_L_L_LR, SMART_BID_CTA) = ${qScore} | Reward: 3.30`);
-      console.log(`[HYPER MAX + SUPER CORE + PMax + gtag + Node.js] Intelligence: ${qStep}/10 | Epsilon: ${epsilon}`);
-      console.log(`[ENHANCED MCP] PMax + SEO/ADS Payload: Timestamp: ${timestamp}`);
-      
-      qStep = qStep >= 10 ? 1 : qStep + 1;
-    }, 2500);
   })();
