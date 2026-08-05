@@ -1,0 +1,46 @@
+name: GEO-CONTEXTUAL-BAITING
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy-eseb-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout Repository Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 2. Set Up Python Environment (v3.12)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 3. Execute ESEB Python Core Engine
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python Modules/GEO-Contextual-Baiting.py
+
+      - name: 4. Auto-Merge Stash & Commit JS Bridge (Zero-Conflict)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git stash
+          git pull --rebase origin main
+          git stash pop || true
+          
+          git add Bridges/GEO-Contextual-Baiting.js
+          if git diff --staged --quiet; then
+            echo "No changes detected in Bridge file. Skipping commit."
+          else
+            git commit -m "build(eseb): auto-compile GEO-Contextual-Baiting.js [skip ci]"
+            git push origin main
+          fi
