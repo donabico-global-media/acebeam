@@ -2,8 +2,8 @@ name: INFINITE-RECURSIVE-SINGULARITY
 
 on:
   schedule:
-    - cron: '0 */4 * * *'          # Tự động mỗi 4 tiếng
-  workflow_dispatch:               # Kích hoạt Manual
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # Lấy đầy đủ history để tránh conflict
 
       - name: Generate Living Entity .ehc
         run: |
@@ -33,7 +35,6 @@ jobs:
           (function() {
             'use strict';
 
-            // 1. Sentinel CSS – Zero CLS
             if (!document.getElementById('ehc-sentinel-core')) {
               const s = document.createElement('style');
               s.id = 'ehc-sentinel-core';
@@ -41,7 +42,6 @@ jobs:
               document.head.appendChild(s);
             }
 
-            // 2. Context
             const ctx = {
               domain: location.hostname || 'donabico.com',
               brand: 'DONABICO GLOBAL MEDIA SYSTEM',
@@ -50,7 +50,6 @@ jobs:
               anchor: '¢24'
             };
 
-            // 3. Schema Injection (ẩn)
             function injectSchema() {
               if (document.getElementById('irs-schema')) return;
               const data = {
@@ -77,7 +76,6 @@ jobs:
               document.head.appendChild(el);
             }
 
-            // 4. Living Pulse – Rich Logs
             let pulse = 0;
             let intelligence = 1;
             let epsilon = 0.35;
@@ -98,7 +96,6 @@ jobs:
               console.log('--------------------------------------------------');
             }
 
-            // 5. Boot
             function init() {
               injectSchema();
               console.log('%c[BOOT] Infinite Recursive Singularity – Living Entity started on donabico.com', 'color:#00bcd4;font-weight:bold;font-size:13px');
@@ -118,6 +115,17 @@ jobs:
         run: |
           git config user.name "EATHESEN-Workflow"
           git config user.email "workflow@eathsen.local"
+          
           git add Bridges/Infinite-Recursive-Singularity.ehc
-          git diff --staged --quiet || git commit -m "Generate Living Entity .ehc | donabico.com | Rich Continuous Logs | V-STAMP-24 | ¢24"
-          git push
+          
+          # Nếu không có thay đổi thì bỏ qua
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          git commit -m "Generate Living Entity .ehc | donabico.com | Rich Continuous Logs | V-STAMP-24 | ¢24"
+          
+          # Kéo thay đổi mới nhất rồi mới push
+          git pull --rebase origin main
+          git push origin main
