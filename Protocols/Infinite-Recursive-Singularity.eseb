@@ -1,0 +1,29 @@
+/* ============================================================
+   ESEB PROTOCOL SOURCE — INFINITE RECURSIVE SINGULARITY
+   VERSION: Living-Entity-Rich-Logs + donabico.com
+   STAMP: V-STAMP-24 | DONABICO GLOBAL MEDIA SYSTEM
+   ANCHOR: ¢24
+   PRIMARY DOMAIN: donabico.com
+   ============================================================ */
+
+PROTOCOL_NAME: Infinite-Recursive-Singularity
+SYSTEM_CORE_UUID: AETH-V360-OMEGA-0001
+CORE_CONSTANT: ¢24
+AUTHORITY: 01 SYSTEM ADMINISTRATOR
+
+PRIMARY_DOMAIN: donabico.com
+BRAND: DONABICO GLOBAL MEDIA SYSTEM
+
+MODE: Living Entity – Continuous Rich Logs
+ZERO_DOM: Strict
+
+GENERATE_TARGET: Bridges/Infinite-Recursive-Singularity.ehc
+INJECTION: Zone 2 – single async script before </body>
+
+REQUIREMENTS:
+  - Continuous Living Pulse every 3 seconds
+  - Rich multi-line colored console logs
+  - Schema.org injection (hidden)
+  - Auto-Discovery domain
+  - Zero visual impact on index.html
+  - Stamp: V-STAMP-24
