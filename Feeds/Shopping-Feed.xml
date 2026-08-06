@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
   <channel>
-    <title>DONABICO GLOBAL MEDIA SYSTEM - Acebeam Feed</title>
+    <title>DONABICO GLOBAL MEDIA SYSTEM - Acebeam Official Store</title>
     <link>https://acebeam.donabico.com</link>
-    <description>Automated High-Performance Acebeam Gear Syndication Feed</description>
+    <description>Official High-Performance Acebeam Tactical Equipment &amp; Outdoor Gear</description>
     <item>
       <g:id>ACEBEAM-TAC-001</g:id>
-      <title>Acebeam Tactical Illumination Gear - Professional Series</title>
-      <description>High-Performance Acebeam Tactical Equipment, Search &amp; Outdoor Gear.</description>
-      <link>https://acebeam.donabico.com</link>
-      <g:image_link>https://acebeam.donabico.com/favicon.ico</g:image_link>
+      <title>Acebeam Tactical Illumination Flashlight Series</title>
+      <description>Professional-grade Acebeam Tactical Illumination Equipment with ultra-durable aircraft aluminum casing and high-lumen output.</description>
+      <link>https://acebeam.donabico.com/landing_pages/landing_pages_affiliate.html</link>
+      <g:image_link>https://acebeam.donabico.com/assets/images/product-main.jpg</g:image_link>
       <g:availability>in_stock</g:availability>
       <g:price>99.95 USD</g:price>
       <g:brand>Acebeam</g:brand>
