@@ -5,15 +5,9 @@
     "eseb_compliance_status": "ESEB_SOTA_2026_HYPER_VERIFIED",
     "security_layer": "CAUSALITY_BREAKER_FIREWALL_ACTIVE",
     "genesis_epoch_utc": "2026-08-03T06:33:26.285206+00:00",
-    "recursive_cycle": 35,
-    "siphon_singularity_index": 32044258029623.67,
+    "recursive_cycle": 36,
+    "siphon_singularity_index": 32046363359763.387,
     "evolution_history": [
-      {
-        "cycle": 12,
-        "timestamp": "2026-08-05T01:57:07.192190+00:00",
-        "singularity_index": 32013677019260.145,
-        "security_status": "INTRUSION_FREE_SECURE"
-      },
       {
         "cycle": 13,
         "timestamp": "2026-08-06T02:00:44.555532+00:00",
@@ -151,10 +145,16 @@
         "timestamp": "2026-08-28T08:32:39.056094+00:00",
         "singularity_index": 32044258029623.67,
         "security_status": "INTRUSION_FREE_SECURE"
+      },
+      {
+        "cycle": 36,
+        "timestamp": "2026-08-29T05:12:14.969535+00:00",
+        "singularity_index": 32046363359763.387,
+        "security_status": "INTRUSION_FREE_SECURE"
       }
     ],
-    "last_evolution_utc": "2026-08-28T08:32:39.056094+00:00"
+    "last_evolution_utc": "2026-08-29T05:12:14.969535+00:00"
   },
-  "hash_signature": "213460dae4aa3acae4a5ba5f55dbd2ac01748ff66d0af916059226eb528c3a59330c374c1167f3ec5afbb1d8827d5946c2e946090ff0a6170c5490e86e013e2bd074a944f5715cd8",
+  "hash_signature": "f149ea77bfe318c9862ed33b8b557a6f893c2da5e3fe56a296718de214a89f561c4203b625b1d93c6070f8e51c47ed317c834f3de4e1c509a7429ff628cb32290432a3233f7f0a05",
   "protected_by": "EATHESEN Causality-Breaker Firewall"
 }
